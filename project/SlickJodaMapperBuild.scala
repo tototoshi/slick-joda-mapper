@@ -40,8 +40,8 @@ object SlickJodaMapperBuild extends Build {
     <url>http://github.com/tototoshi/slick-joda-mapper</url>
     <licenses>
       <license>
-        <name>Apache License, Version 2.0</name>
-        <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        <name>Two-clause BSD-style license</name>
+        <url>http://github.com/tototoshi/slick-joda-mapper/blob/master/LICENSE.txt</url>
         <distribution>repo</distribution>
       </license>
     </licenses>
