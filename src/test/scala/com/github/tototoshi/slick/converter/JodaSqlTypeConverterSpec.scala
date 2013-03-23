@@ -16,7 +16,6 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers {
     it("should convert LocalDate to java.sql.Date") {
       fixture.localDateConverter.toSqlType(null) should be(null)
       val date = new LocalDate(2013, 3, 23)
-      println(date.toDate.getTime)
       fixture.localDateConverter.toSqlType(date).getTime should be(1363964400000L)
     }
 
