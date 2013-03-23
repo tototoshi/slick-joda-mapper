@@ -9,18 +9,17 @@ object SlickJodaMapperBuild extends Build {
     settings = Project.defaultSettings ++ Seq(
       name := "slick-joda-mapper",
       organization := "com.github.tototoshi",
-      version := "0.1-SNAPSHOT",
+      version := "0.1.0",
       scalaVersion := "2.10.0",
       scalacOptions ++= Seq("-deprecation", "-language:_"),
       libraryDependencies ++= Seq(
         "joda-time" % "joda-time" % "2.2",
         "org.joda" % "joda-convert" % "1.3.1",
         "com.typesafe.slick" %% "slick" % "1.0.0",
-        "postgresql" % "postgresql" % "9.1-901.jdbc4" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
       ),
       initialCommands += "import com.github.tototoshi.slick.JodaSupport._"
-    )
+    ) ++ publishingSettings
   )
 
   val publishingSettings = Seq(
