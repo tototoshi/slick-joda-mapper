@@ -38,14 +38,16 @@ class JodaSupportSpec extends FunSpec with ShouldMatchers {
 
       import com.github.tototoshi.slick.JodaSupport._
       import scala.slick.driver.PostgresDriver.simple._
-      import org.joda.time.{ DateTime, LocalDate }
+      import org.joda.time.{ DateTime, LocalDate, LocalTime }
 
-      object JodaTest extends Table[(LocalDate, DateTime, Option[LocalDate], Option[DateTime])]("joda_test") {
+      object JodaTest extends Table[(LocalDate, DateTime, LocalTime, Option[LocalDate], Option[DateTime], Option[LocalTime])]("joda_test") {
         def localDate = column[LocalDate]("local_date")
         def dateTime = column[DateTime]("date_time")
+        def localTime = column[LocalTime]("local_time")
         def optLocalDate = column[Option[LocalDate]]("opt_local_date")
         def optDateTime = column[Option[DateTime]]("opt_date_time")
-        def * = localDate ~ dateTime ~ optLocalDate ~ optDateTime
+        def optLocalTime = column[Option[LocalTime]]("opt_local_time")
+        def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime
       }
 
       val db = Database.forURL("jdbc:h2:memory:test",
@@ -60,8 +62,10 @@ class JodaSupportSpec extends FunSpec with ShouldMatchers {
         JodaTest.insert(
           new LocalDate(2012, 12, 4),
           new DateTime(2012, 12, 4, 0, 0, 0, 0),
+          new LocalTime(0),
           Some(new LocalDate(2012, 12, 5)),
-          None
+          None,
+          Some(new LocalTime(0))
         )
 
         val record = (for { j <- JodaTest } yield j).firstOption
@@ -69,8 +73,11 @@ class JodaSupportSpec extends FunSpec with ShouldMatchers {
         record should be(
           Some((new LocalDate(2012, 12, 4),
             new DateTime(2012, 12, 4, 0, 0, 0, 0),
+            new LocalTime(0),
             Some(new LocalDate(2012, 12, 5)),
-            None))
+            None,
+            Some(new LocalTime(0))
+          ))
         )
 
         JodaTest.ddl.drop
