@@ -31,7 +31,7 @@ import scala.slick.driver._
 import scala.slick.lifted.BaseTypeMapper
 import scala.slick.session.{ PositionedParameters, PositionedResult }
 import com.github.tototoshi.slick.converter._
-import org.joda.time.{ LocalDate, DateTime }
+import org.joda.time.{ LocalDate, DateTime, LocalTime }
 
 trait JodaLocalDateMapper { driver: ExtendedDriver =>
 
@@ -85,15 +85,43 @@ trait JodaDateTimeMapper { driver: ExtendedDriver =>
 
 }
 
-object JodaMappers extends ExtendedDriver
-    with JodaLocalDateMapper
-    with JodaDateTimeMapper {
+trait JodaLocalTimeMapper { driver: ExtendedDriver =>
+
+  object localTimeTypeMapper extends BaseTypeMapper[LocalTime] {
+
+    def apply(profile: BasicProfile) = localTimeTypeMapperDelegate
+
+    val localTimeTypeMapperDelegate = new LocalTimeJdbcType
+
+    class LocalTimeJdbcType extends DriverTypeMapperDelegate[LocalTime]
+        with JodaLocalTimeSqlTimeConverter {
+      def zero = new LocalTime(0L)
+      def sqlType = java.sql.Types.TIME
+      def setValue(v: LocalTime, p: PositionedParameters) =
+        p.setTime(toSqlType(v))
+      def setOption(v: Option[LocalTime], p: PositionedParameters) =
+        p.setTimeOption(v.map(toSqlType))
+      def nextValue(r: PositionedResult) = {
+        fromSqlType(r.nextTime)
+      }
+      def updateValue(v: LocalTime, r: PositionedResult) = r.updateTime(toSqlType(v))
+    }
+
+  }
+
 }
+
+object JodaMappers extends ExtendedDriver
+  with JodaLocalDateMapper
+  with JodaDateTimeMapper
+  with JodaLocalTimeMapper
 
 object JodaSupport {
 
   implicit val localDateTypeMapper = JodaMappers.localDateTypeMapper
 
   implicit val dateTimeTypeMapper = JodaMappers.dateTimeTypeMapper
+
+  implicit val localTimeTypeMapper = JodaMappers.localTimeTypeMapper
 
 }

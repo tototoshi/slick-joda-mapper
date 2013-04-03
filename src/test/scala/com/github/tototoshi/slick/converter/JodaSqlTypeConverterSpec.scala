@@ -1,6 +1,7 @@
 package com.github.tototoshi.slick.converter
 
-import org.joda.time.{ DateTime, LocalDate }
+import org.joda.time.{ DateTime, LocalDate, LocalTime }
+import java.sql.Time
 import org.scalatest.FunSpec
 import org.scalatest.matchers._
 
@@ -8,7 +9,8 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers {
 
   def fixture = new {
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
-    val datetimeConverter = new JodaDateTimeSqlTimestampConverter {}
+    val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}
+    val localTimeConverter = new JodaLocalTimeSqlTimeConverter {}
   }
 
   describe("JodaLocalDateSqlDateConverter") {
@@ -29,17 +31,40 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers {
   describe("JodaDateTimeSqlDateConverter") {
 
     it("should convert DateTime to java.sql.Timestamp") {
-      fixture.datetimeConverter.toSqlType(null) should be(null)
+      fixture.dateTimeConverter.toSqlType(null) should be(null)
       val current = DateTime.now
       val timestamp = current.getMillis
-      fixture.datetimeConverter.toSqlType(current).getTime should be(timestamp)
+      fixture.dateTimeConverter.toSqlType(current).getTime should be(timestamp)
     }
 
     it("should convert java.sql.Timestamp to DateTime") {
-      fixture.datetimeConverter.fromSqlType(null) should be(null)
+      fixture.dateTimeConverter.fromSqlType(null) should be(null)
       val current = DateTime.now
       val timestamp = current.getMillis
-      fixture.datetimeConverter.fromSqlType(new java.sql.Timestamp(timestamp)) should be(current)
+      fixture.dateTimeConverter.fromSqlType(new java.sql.Timestamp(timestamp)) should be(current)
+    }
+
+  }
+
+  describe("JodaLocalTimeSqlTimeConverter") {
+
+    val offset = {
+      import java.util.Calendar
+      val cal = Calendar.getInstance
+      cal.get(Calendar.ZONE_OFFSET)
+    }
+
+    it("should convert LocalTime to java.sql.Time") {
+      fixture.localTimeConverter.fromSqlType(null) should be(null)
+      val current = LocalTime.now
+      fixture.localTimeConverter.toSqlType(current) should be(new Time(current.toDateTimeToday.getMillis))
+    }
+
+    it("should convert java.sql.Time to LocalTime") {
+      fixture.localTimeConverter.fromSqlType(null) should be(null)
+      val current = LocalTime.now
+      val timestamp = current.toDateTimeToday.getMillis
+      fixture.localTimeConverter.fromSqlType(new java.sql.Time(timestamp)) should be(current)
     }
 
   }

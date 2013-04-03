@@ -19,7 +19,11 @@ object SlickJodaMapperBuild extends Build {
         "com.h2database" % "h2" % "[1.3,)" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
       ),
-      initialCommands += "import com.github.tototoshi.slick.JodaSupport._"
+      initialCommands += """
+        import com.github.tototoshi.slick.JodaSupport._
+        import org.joda.time._
+        import java.sql._
+      """
     ) ++ publishingSettings
   )
 
