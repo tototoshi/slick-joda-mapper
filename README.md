@@ -1,13 +1,14 @@
 # slick-joda-mapper
 
 Enables you to use joda-time with Slick.
+You can persist `DateTime`, `LocalDate`, `LocalTime` with Slick.
 
 # Install
 
 Now supporting Slick 1.0.0 (and Scala 2.10.x). It's available from Maven central.
 
 ```scala
-libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.1.0"
+libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.2.0"
 ```
 
 # Usage
@@ -18,8 +19,8 @@ import com.github.tototoshi.slick.JodaSupport._
 
 That's all.
 
-
 # Example
+
 
 ```scala
 scala> import com.github.tototoshi.slick.JodaSupport._
