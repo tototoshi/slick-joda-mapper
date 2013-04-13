@@ -27,37 +27,47 @@
  */
 package com.github.tototoshi.slick
 
-import org.scalatest.FunSpec
+import org.scalatest._
 import org.scalatest.matchers._
+import com.github.tototoshi.slick.JodaSupport._
+import scala.slick.driver.PostgresDriver.simple._
+import org.joda.time.{ DateTime, LocalDate, LocalTime }
 
-class JodaSupportSpec extends FunSpec with ShouldMatchers {
+object JodaTest extends Table[(LocalDate, DateTime, LocalTime, Option[LocalDate], Option[DateTime], Option[LocalTime])]("joda_test") {
+  def localDate = column[LocalDate]("local_date")
+  def dateTime = column[DateTime]("date_time")
+  def localTime = column[LocalTime]("local_time")
+  def optLocalDate = column[Option[LocalDate]]("opt_local_date")
+  def optDateTime = column[Option[DateTime]]("opt_date_time")
+  def optLocalTime = column[Option[LocalTime]]("opt_local_time")
+  def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime
+}
+
+class JodaSupportSpec extends FunSpec
+    with ShouldMatchers
+    with BeforeAndAfter {
+
+  val db = Database.forURL("jdbc:h2:memory:test",
+    driver = "org.h2.Driver",
+    user = "sa",
+    password = null)
+
+  before {
+    db withSession { implicit session: Session =>
+      JodaTest.ddl.create
+    }
+  }
+
+  after {
+    db withSession { implicit session: Session =>
+      JodaTest.ddl.drop
+    }
+  }
 
   describe("JodaSupport") {
 
     it("should enable us to use joda-time with slick") {
-
-      import com.github.tototoshi.slick.JodaSupport._
-      import scala.slick.driver.PostgresDriver.simple._
-      import org.joda.time.{ DateTime, LocalDate, LocalTime }
-
-      object JodaTest extends Table[(LocalDate, DateTime, LocalTime, Option[LocalDate], Option[DateTime], Option[LocalTime])]("joda_test") {
-        def localDate = column[LocalDate]("local_date")
-        def dateTime = column[DateTime]("date_time")
-        def localTime = column[LocalTime]("local_time")
-        def optLocalDate = column[Option[LocalDate]]("opt_local_date")
-        def optDateTime = column[Option[DateTime]]("opt_date_time")
-        def optLocalTime = column[Option[LocalTime]]("opt_local_time")
-        def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime
-      }
-
-      val db = Database.forURL("jdbc:h2:memory:test",
-        driver = "org.h2.Driver",
-        user = "sa",
-        password = null)
-
       db withSession { implicit session: Session =>
-
-        JodaTest.ddl.create
 
         JodaTest.insert(
           new LocalDate(2012, 12, 4),
@@ -80,12 +90,21 @@ class JodaSupportSpec extends FunSpec with ShouldMatchers {
           ))
         )
 
-        JodaTest.ddl.drop
-
       }
-
     }
 
+    it("can be used with comparative operators") {
+      db withSession { implicit session: Session =>
+        val q1 = for {
+          jt <- JodaTest
+          if jt.dateTime > new DateTime(2012, 12, 5, 0, 0, 0)
+          if jt.localDate > new LocalDate(2012, 12, 5)
+          if jt.localTime > new LocalTime(0)
+        } yield jt
+
+        q1.firstOption should be(None)
+      }
+    }
   }
 }
 

@@ -53,6 +53,7 @@ trait JodaLocalDateMapper { driver: ExtendedDriver =>
         fromSqlType(r.nextDate)
       }
       def updateValue(v: LocalDate, r: PositionedResult) = r.updateDate(toSqlType(v))
+      override def valueToSQLLiteral(value: LocalDate) = "{d '" + toSqlType(value).toString + "'}"
     }
 
   }
@@ -79,6 +80,7 @@ trait JodaDateTimeMapper { driver: ExtendedDriver =>
         fromSqlType(r.nextTimestamp)
       }
       def updateValue(v: DateTime, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+      override def valueToSQLLiteral(value: DateTime) = "{ts '" + toSqlType(value).toString + "'}"
     }
 
   }
@@ -105,6 +107,7 @@ trait JodaLocalTimeMapper { driver: ExtendedDriver =>
         fromSqlType(r.nextTime)
       }
       def updateValue(v: LocalTime, r: PositionedResult) = r.updateTime(toSqlType(v))
+      override def valueToSQLLiteral(value: LocalTime) = "{t '" + toSqlType(value).toString + "'}"
     }
 
   }
