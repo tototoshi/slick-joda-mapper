@@ -64,47 +64,80 @@ class JodaSupportSpec extends FunSpec
     }
   }
 
+  def insertTestData()(implicit session: Session): Unit = {
+    JodaTest.insert(
+      new LocalDate(2012, 12, 4),
+      new DateTime(2012, 12, 4, 0, 0, 0, 0),
+      new LocalTime(0),
+      Some(new LocalDate(2012, 12, 5)),
+      None,
+      Some(new LocalTime(0))
+    )
+    JodaTest.insert(
+      new LocalDate(2012, 12, 5),
+      new DateTime(2012, 12, 4, 0, 0, 0, 0),
+      new LocalTime(0),
+      Some(new LocalDate(2012, 12, 5)),
+      None,
+      Some(new LocalTime(0))
+    )
+    JodaTest.insert(
+      new LocalDate(2012, 12, 6),
+      new DateTime(2012, 12, 4, 0, 0, 0, 0),
+      new LocalTime(0),
+      Some(new LocalDate(2012, 12, 5)),
+      None,
+      Some(new LocalTime(0))
+    )
+  }
+
   describe("JodaSupport") {
 
     it("should enable us to use joda-time with slick") {
       db withSession { implicit session: Session =>
-
-        JodaTest.insert(
-          new LocalDate(2012, 12, 4),
-          new DateTime(2012, 12, 4, 0, 0, 0, 0),
-          new LocalTime(0),
-          Some(new LocalDate(2012, 12, 5)),
-          None,
-          Some(new LocalTime(0))
-        )
-
-        val record = (for { j <- JodaTest } yield j).firstOption
-
-        record should be(
-          Some((new LocalDate(2012, 12, 4),
-            new DateTime(2012, 12, 4, 0, 0, 0, 0),
-            new LocalTime(0),
-            Some(new LocalDate(2012, 12, 5)),
-            None,
-            Some(new LocalTime(0))
-          ))
-        )
-
+        insertTestData()
+        val record = (for { j <- JodaTest } yield j).list()
+        record should have size (3)
       }
     }
 
     it("can be used with comparative operators") {
       db withSession { implicit session: Session =>
+        insertTestData()
+
         val q1 = for {
           jt <- JodaTest
-          if jt.dateTime > new DateTime(2012, 12, 5, 0, 0, 0)
           if jt.localDate > new LocalDate(2012, 12, 5)
-          if jt.localTime > new LocalTime(0)
         } yield jt
 
-        q1.firstOption should be(None)
+        q1.list should have size (1)
       }
     }
+
+    it("should be able to filter with the specified date") {
+      db withSession { implicit session: Session =>
+        insertTestData()
+
+        val q1 = for {
+          jt <- JodaTest
+          if jt.localDate === new LocalDate(2012, 12, 5)
+        } yield jt
+
+        val res1 = q1.list
+        res1 should have size (1)
+        res1.headOption.map(_._1) should be(Some(new LocalDate(2012, 12, 5)))
+
+        val q2 = for {
+          jt <- JodaTest
+          if jt.localDate =!= new LocalDate(2012, 12, 5)
+        } yield jt
+        val res2 = q2.list
+        res2 should have size (2)
+        res2.lift(1).map(_._1) should not be (Some(new LocalDate(2012, 12, 5)))
+        res2.lift(2).map(_._1) should not be (Some(new LocalDate(2012, 12, 5)))
+      }
+    }
+
   }
 }
 
