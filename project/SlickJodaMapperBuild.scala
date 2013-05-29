@@ -9,7 +9,7 @@ object SlickJodaMapperBuild extends Build {
     settings = Project.defaultSettings ++ Seq(
       name := "slick-joda-mapper",
       organization := "com.github.tototoshi",
-      version := "0.3.0-SNAPSHOT",
+      version := "0.3.0",
       scalaVersion := "2.10.0",
       scalacOptions ++= Seq("-deprecation", "-language:_"),
       libraryDependencies ++= Seq(
