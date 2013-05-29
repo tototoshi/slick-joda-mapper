@@ -8,7 +8,7 @@ You can persist `DateTime`, `LocalDate`, `LocalTime` with Slick.
 Now supporting Slick 1.0.0 (and Scala 2.10.x). It's available from Maven central.
 
 ```scala
-libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.2.1"
+libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.3.0"
 ```
 
 # Usage
