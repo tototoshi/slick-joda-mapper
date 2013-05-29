@@ -32,20 +32,36 @@ import org.scalatest.matchers._
 import com.github.tototoshi.slick.JodaSupport._
 import scala.slick.driver.PostgresDriver.simple._
 import org.joda.time.{ DateTime, LocalDate, LocalTime }
+import scala.slick.jdbc.{ StaticQuery, GetResult }
+import scala.slick.session.PositionedResult
+import scala.slick.jdbc.StaticQuery.interpolation
 
-object JodaTest extends Table[(LocalDate, DateTime, LocalTime, Option[LocalDate], Option[DateTime], Option[LocalTime])]("joda_test") {
-  def localDate = column[LocalDate]("local_date")
-  def dateTime = column[DateTime]("date_time")
-  def localTime = column[LocalTime]("local_time")
-  def optLocalDate = column[Option[LocalDate]]("opt_local_date")
-  def optDateTime = column[Option[DateTime]]("opt_date_time")
-  def optLocalTime = column[Option[LocalTime]]("opt_local_time")
-  def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime
+case class Jodas(localDate: LocalDate,
+  dateTime: DateTime,
+  localTime: LocalTime,
+  optLocalDate: Option[LocalDate],
+  optDateTime: Option[DateTime],
+  optLocalTime: Option[LocalTime])
+
+object JodaTest extends Table[Jodas]("JODA_TEST") {
+  def localDate = column[LocalDate]("LOCAL_DATE")
+  def dateTime = column[DateTime]("DATE_TIME")
+  def localTime = column[LocalTime]("LOCAL_TIME")
+  def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
+  def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
+  def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
+  def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime <> (Jodas.apply _, Jodas.unapply _)
 }
 
 class JodaSupportSpec extends FunSpec
     with ShouldMatchers
     with BeforeAndAfter {
+
+  implicit class GetLocalDateResult(r: PositionedResult) {
+    def nextLocalDate = ???
+  }
+
+  //  val getResult = GetResult[Jodas] { r => Jodas(r.nextDate, r.<<, r.<<, r.<<, r.<<, r.<<)}
 
   val db = Database.forURL("jdbc:h2:memory:test",
     driver = "org.h2.Driver",
@@ -66,28 +82,35 @@ class JodaSupportSpec extends FunSpec
 
   def insertTestData()(implicit session: Session): Unit = {
     JodaTest.insert(
-      new LocalDate(2012, 12, 4),
-      new DateTime(2012, 12, 4, 0, 0, 0, 0),
-      new LocalTime(0),
-      Some(new LocalDate(2012, 12, 5)),
-      None,
-      Some(new LocalTime(0))
+      Jodas(
+        new LocalDate(2012, 12, 4),
+        new DateTime(2012, 12, 4, 0, 0, 0, 0),
+        new LocalTime(0),
+        Some(new LocalDate(2012, 12, 4)),
+        Some(new DateTime(2012, 12, 4, 0, 0, 0, 0)),
+        Some(new LocalTime(0))
+      )
     )
     JodaTest.insert(
-      new LocalDate(2012, 12, 5),
-      new DateTime(2012, 12, 4, 0, 0, 0, 0),
-      new LocalTime(0),
-      Some(new LocalDate(2012, 12, 5)),
-      None,
-      Some(new LocalTime(0))
+      Jodas(
+        new LocalDate(2012, 12, 5),
+        new DateTime(2012, 12, 5, 0, 0, 0, 0),
+        new LocalTime(0),
+        Some(new LocalDate(2012, 12, 5)),
+        None,
+        Some(new LocalTime(0))
+
+      )
     )
     JodaTest.insert(
-      new LocalDate(2012, 12, 6),
-      new DateTime(2012, 12, 4, 0, 0, 0, 0),
-      new LocalTime(0),
-      Some(new LocalDate(2012, 12, 5)),
-      None,
-      Some(new LocalTime(0))
+      Jodas(
+        new LocalDate(2012, 12, 6),
+        new DateTime(2012, 12, 6, 0, 0, 0, 0),
+        new LocalTime(0),
+        Some(new LocalDate(2012, 12, 6)),
+        None,
+        Some(new LocalTime(0))
+      )
     )
   }
 
@@ -98,6 +121,30 @@ class JodaSupportSpec extends FunSpec
         insertTestData()
         val record = (for { j <- JodaTest } yield j).list()
         record should have size (3)
+      }
+    }
+
+    it("should enable us to use joda-time with string interpolation API") {
+      db withSession { implicit session: Session =>
+        insertTestData()
+        sql"SELECT opt_local_date FROM joda_test WHERE local_date = ${new LocalDate(2012, 12, 4)}"
+          .as[Option[LocalDate]].first should be(Some(new LocalDate(2012, 12, 4)))
+        sql"SELECT opt_date_time FROM joda_test WHERE date_time = ${new DateTime(2012, 12, 4, 0, 0, 0, 0)}"
+          .as[Option[DateTime]].first should be(Some(new DateTime(2012, 12, 4, 0, 0, 0, 0)))
+        sql"SELECT opt_local_time FROM joda_test WHERE local_time = ${new LocalTime(0)}"
+          .as[Option[LocalTime]].first should be(Some(new LocalTime(0)))
+        sql"SELECT local_date FROM joda_test WHERE opt_local_date = ${Some(new LocalDate(2012, 12, 5))}"
+          .as[LocalDate].first should be(new LocalDate(2012, 12, 5))
+        sql"SELECT date_time FROM joda_test WHERE opt_date_time = ${Some(new DateTime(2012, 12, 4, 0, 0, 0, 0))}"
+          .as[DateTime].first should be(new DateTime(2012, 12, 4, 0, 0, 0, 0))
+        sql"SELECT local_time FROM joda_test WHERE opt_local_time = ${Some(new LocalTime(0))}"
+          .as[LocalTime].first should be(new LocalTime(0))
+
+        implicit val getResult: GetResult[(LocalDate, DateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<))
+        implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
+
+        sql"SELECT local_date, date_time, local_time FROM joda_test".as[(LocalDate, DateTime, LocalTime)].list() should have size (3)
+        sql"SELECT local_date, date_time, local_time, opt_local_date, opt_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size (3)
       }
     }
 
@@ -125,7 +172,7 @@ class JodaSupportSpec extends FunSpec
 
         val res1 = q1.list
         res1 should have size (1)
-        res1.headOption.map(_._1) should be(Some(new LocalDate(2012, 12, 5)))
+        res1.headOption.map(_.localDate) should be(Some(new LocalDate(2012, 12, 5)))
 
         val q2 = for {
           jt <- JodaTest
@@ -133,8 +180,8 @@ class JodaSupportSpec extends FunSpec
         } yield jt
         val res2 = q2.list
         res2 should have size (2)
-        res2.lift(1).map(_._1) should not be (Some(new LocalDate(2012, 12, 5)))
-        res2.lift(2).map(_._1) should not be (Some(new LocalDate(2012, 12, 5)))
+        res2.lift(1).map(_.localDate) should not be (Some(new LocalDate(2012, 12, 5)))
+        res2.lift(2).map(_.localDate) should not be (Some(new LocalDate(2012, 12, 5)))
       }
     }
 

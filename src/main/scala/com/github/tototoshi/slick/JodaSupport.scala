@@ -32,6 +32,7 @@ import scala.slick.lifted.BaseTypeMapper
 import scala.slick.session.{ PositionedParameters, PositionedResult }
 import com.github.tototoshi.slick.converter._
 import org.joda.time.{ LocalDate, DateTime, LocalTime }
+import scala.slick.jdbc.{ SetParameter, GetResult }
 
 trait JodaLocalDateMapper { driver: ExtendedDriver =>
 
@@ -56,6 +57,30 @@ trait JodaLocalDateMapper { driver: ExtendedDriver =>
       override def valueToSQLLiteral(value: LocalDate) = "{d '" + toSqlType(value).toString + "'}"
     }
 
+  }
+
+  object getLocalDateResult extends GetResult[LocalDate]
+      with JodaLocalDateSqlDateConverter {
+    def apply(rs: PositionedResult) = fromSqlType(rs.nextDate())
+  }
+
+  object getLocalDateOptionResult extends GetResult[Option[LocalDate]]
+      with JodaLocalDateSqlDateConverter {
+    def apply(rs: PositionedResult) = rs.nextDateOption().map(fromSqlType)
+  }
+
+  object setLocalDateParameter extends SetParameter[LocalDate]
+      with JodaLocalDateSqlDateConverter {
+    def apply(d: LocalDate, p: PositionedParameters) {
+      p.setDate(toSqlType(d))
+    }
+  }
+
+  object setLocalDateOptionParameter extends SetParameter[Option[LocalDate]]
+      with JodaLocalDateSqlDateConverter {
+    def apply(d: Option[LocalDate], p: PositionedParameters) {
+      p.setDateOption(d.map(toSqlType))
+    }
   }
 
 }
@@ -85,6 +110,30 @@ trait JodaDateTimeMapper { driver: ExtendedDriver =>
 
   }
 
+  object getDateTimeResult extends GetResult[DateTime]
+      with JodaDateTimeSqlTimestampConverter {
+    def apply(rs: PositionedResult) = fromSqlType(rs.nextTimestamp())
+  }
+
+  object getDateTimeOptionResult extends GetResult[Option[DateTime]]
+      with JodaDateTimeSqlTimestampConverter {
+    def apply(rs: PositionedResult) = rs.nextTimestampOption().map(fromSqlType)
+  }
+
+  object setDateTimeParameter extends SetParameter[DateTime]
+      with JodaDateTimeSqlTimestampConverter {
+    def apply(d: DateTime, p: PositionedParameters) {
+      p.setTimestamp(toSqlType(d))
+    }
+  }
+
+  object setDateTimeOptionParameter extends SetParameter[Option[DateTime]]
+      with JodaDateTimeSqlTimestampConverter {
+    def apply(d: Option[DateTime], p: PositionedParameters) {
+      p.setTimestampOption(d.map(toSqlType))
+    }
+  }
+
 }
 
 trait JodaLocalTimeMapper { driver: ExtendedDriver =>
@@ -112,6 +161,30 @@ trait JodaLocalTimeMapper { driver: ExtendedDriver =>
 
   }
 
+  object getLocalTimeResult extends GetResult[LocalTime]
+      with JodaLocalTimeSqlTimeConverter {
+    def apply(rs: PositionedResult) = fromSqlType(rs.nextTime())
+  }
+
+  object getLocalTimeOptionResult extends GetResult[Option[LocalTime]]
+      with JodaLocalTimeSqlTimeConverter {
+    def apply(rs: PositionedResult) = rs.nextTimeOption().map(fromSqlType)
+  }
+
+  object setLocalTimeParameter extends SetParameter[LocalTime]
+      with JodaLocalTimeSqlTimeConverter {
+    def apply(d: LocalTime, p: PositionedParameters) {
+      p.setTime(toSqlType(d))
+    }
+  }
+
+  object setLocalTimeOptionParameter extends SetParameter[Option[LocalTime]]
+      with JodaLocalTimeSqlTimeConverter {
+    def apply(d: Option[LocalTime], p: PositionedParameters) {
+      p.setTimeOption(d.map(toSqlType))
+    }
+  }
+
 }
 
 object JodaMappers extends ExtendedDriver
@@ -123,8 +196,32 @@ object JodaSupport {
 
   implicit val localDateTypeMapper = JodaMappers.localDateTypeMapper
 
+  implicit val getLocalDateResult = JodaMappers.getLocalDateResult
+
+  implicit val getLocalDateOptionResult = JodaMappers.getLocalDateOptionResult
+
+  implicit val setLocalDateParameter = JodaMappers.setLocalDateParameter
+
+  implicit val setLocalDateOptionParameter = JodaMappers.setLocalDateOptionParameter
+
   implicit val dateTimeTypeMapper = JodaMappers.dateTimeTypeMapper
 
+  implicit val getDateTimeResult = JodaMappers.getDateTimeResult
+
+  implicit val getDateTimeOptionResult = JodaMappers.getDateTimeOptionResult
+
+  implicit val setDateTimeParameter = JodaMappers.setDateTimeParameter
+
+  implicit val setDateTimeOptionParameter = JodaMappers.setDateTimeOptionParameter
+
   implicit val localTimeTypeMapper = JodaMappers.localTimeTypeMapper
+
+  implicit val getLocalTimeResult = JodaMappers.getLocalTimeResult
+
+  implicit val getLocalTimeOptionResult = JodaMappers.getLocalTimeOptionResult
+
+  implicit val setLocalTimeParameter = JodaMappers.setLocalTimeParameter
+
+  implicit val setLocalTimeOptionParameter = JodaMappers.setLocalTimeOptionParameter
 
 }
