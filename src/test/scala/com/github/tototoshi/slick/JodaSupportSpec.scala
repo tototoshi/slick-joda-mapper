@@ -57,12 +57,6 @@ class JodaSupportSpec extends FunSpec
     with ShouldMatchers
     with BeforeAndAfter {
 
-  implicit class GetLocalDateResult(r: PositionedResult) {
-    def nextLocalDate = ???
-  }
-
-  //  val getResult = GetResult[Jodas] { r => Jodas(r.nextDate, r.<<, r.<<, r.<<, r.<<, r.<<)}
-
   val db = Database.forURL("jdbc:h2:memory:test",
     driver = "org.h2.Driver",
     user = "sa",
