@@ -25,30 +25,25 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.tototoshi.slick.converter
 
+package com.github.tototoshi.slick
 
-trait SqlTypeConverter[A, B] extends FromTypeConverter[A, B]
-  with ToTypeConverter[A, B]
+import com.github.tototoshi.slick.converter.SqlTypeConverter
+import scala.slick.session.PositionedResult
+import scala.slick.jdbc.GetResult
 
-trait FromTypeConverter[A, B] {
-  def fromSqlType(a: A): B
-}
+trait JodaGetResult[A, B] {
+  self: SqlTypeConverter[A, B] =>
 
-trait ToTypeConverter[A, B] {
+  def next(rs: PositionedResult): A
 
-  def toSqlType(b: B): A
+  def nextOption(rs: PositionedResult): Option[A]
 
-  def millisToSqlType(d: { def getTime(): Long }): java.sql.Date = {
-    import java.util.Calendar
-    val cal = Calendar.getInstance()
-    cal.setTimeInMillis(d.getTime)
-    cal.set(Calendar.HOUR_OF_DAY, 0)
-    cal.set(Calendar.MINUTE, 0)
-    cal.set(Calendar.SECOND, 0)
-    cal.set(Calendar.MILLISECOND, 0)
-    new java.sql.Date(cal.getTimeInMillis)
+  object getResult extends GetResult[B] {
+    def apply(rs: PositionedResult) = fromSqlType(next(rs))
   }
 
+  object getOptionResult extends GetResult[Option[B]] {
+    def apply(rs: PositionedResult) = nextOption(rs).map(fromSqlType)
+  }
 }
-

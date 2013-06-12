@@ -25,30 +25,29 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.github.tototoshi.slick.converter
 
+package com.github.tototoshi.slick
 
-trait SqlTypeConverter[A, B] extends FromTypeConverter[A, B]
-  with ToTypeConverter[A, B]
+import com.github.tototoshi.slick.converter.SqlTypeConverter
+import scala.slick.session.PositionedParameters
+import scala.slick.jdbc.SetParameter
 
-trait FromTypeConverter[A, B] {
-  def fromSqlType(a: A): B
-}
+trait JodaSetParameter[A, B] {
+  self: SqlTypeConverter[A, B] =>
 
-trait ToTypeConverter[A, B] {
+  def set(rs: PositionedParameters, d: A): Unit
 
-  def toSqlType(b: B): A
+  def setOption(rs: PositionedParameters, d: Option[A]): Unit
 
-  def millisToSqlType(d: { def getTime(): Long }): java.sql.Date = {
-    import java.util.Calendar
-    val cal = Calendar.getInstance()
-    cal.setTimeInMillis(d.getTime)
-    cal.set(Calendar.HOUR_OF_DAY, 0)
-    cal.set(Calendar.MINUTE, 0)
-    cal.set(Calendar.SECOND, 0)
-    cal.set(Calendar.MILLISECOND, 0)
-    new java.sql.Date(cal.getTimeInMillis)
+  object setJodaParameter extends SetParameter[B] {
+    def apply(d: B, p: PositionedParameters) {
+      set(p, toSqlType(d))
+    }
   }
 
+  object setJodaOptionParameter extends SetParameter[Option[B]] {
+    def apply(d: Option[B], p: PositionedParameters) {
+      setOption(p, d.map(toSqlType))
+    }
+  }
 }
-
