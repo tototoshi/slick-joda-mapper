@@ -32,9 +32,9 @@ import org.scalatest.matchers._
 import com.github.tototoshi.slick.JodaSupport._
 import scala.slick.driver.PostgresDriver.simple._
 import org.joda.time.{ DateTime, LocalDate, LocalTime }
-import scala.slick.jdbc.{ StaticQuery, GetResult }
-import scala.slick.session.PositionedResult
+import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
+import java.util.Locale
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,
@@ -63,6 +63,8 @@ class JodaSupportSpec extends FunSpec
     password = null)
 
   before {
+    Locale.setDefault(Locale.JAPAN)
+
     db withSession { implicit session: Session =>
       JodaTest.ddl.create
     }

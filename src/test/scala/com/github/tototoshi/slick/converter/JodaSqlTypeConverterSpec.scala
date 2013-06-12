@@ -2,15 +2,20 @@ package com.github.tototoshi.slick.converter
 
 import org.joda.time.{ DateTime, LocalDate, LocalTime }
 import java.sql.Time
-import org.scalatest.FunSpec
+import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
+import java.util.Locale
 
-class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers {
+class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
 
   def fixture = new {
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
     val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}
     val localTimeConverter = new JodaLocalTimeSqlTimeConverter {}
+  }
+
+  before {
+    Locale.setDefault(Locale.JAPAN)
   }
 
   describe("JodaLocalDateSqlDateConverter") {
