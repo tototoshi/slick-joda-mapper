@@ -4,7 +4,7 @@ import org.joda.time.{ DateTime, LocalDate, LocalTime }
 import java.sql.Time
 import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
-import java.util.Locale
+import java.util.{ TimeZone, Locale }
 
 class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
 
@@ -16,6 +16,7 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
 
   before {
     Locale.setDefault(Locale.JAPAN)
+    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"))
   }
 
   describe("JodaLocalDateSqlDateConverter") {

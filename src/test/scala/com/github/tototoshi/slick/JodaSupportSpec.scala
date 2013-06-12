@@ -34,7 +34,7 @@ import scala.slick.driver.PostgresDriver.simple._
 import org.joda.time.{ DateTime, LocalDate, LocalTime }
 import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
-import java.util.Locale
+import java.util.{TimeZone, Locale}
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,
@@ -64,6 +64,7 @@ class JodaSupportSpec extends FunSpec
 
   before {
     Locale.setDefault(Locale.JAPAN)
+    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"))
 
     db withSession { implicit session: Session =>
       JodaTest.ddl.create
