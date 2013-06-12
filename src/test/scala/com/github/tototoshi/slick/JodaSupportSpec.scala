@@ -31,10 +31,10 @@ import org.scalatest._
 import org.scalatest.matchers._
 import com.github.tototoshi.slick.JodaSupport._
 import scala.slick.driver.PostgresDriver.simple._
-import org.joda.time.{ DateTime, LocalDate, LocalTime }
+import org.joda.time.{ DateTimeZone, DateTime, LocalDate, LocalTime }
 import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
-import java.util.{TimeZone, Locale}
+import java.util.{ TimeZone, Locale }
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,
@@ -64,7 +64,9 @@ class JodaSupportSpec extends FunSpec
 
   before {
     Locale.setDefault(Locale.JAPAN)
-    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"))
+    val tz = TimeZone.getTimeZone("Asia/Tokyo")
+    TimeZone.setDefault(tz)
+    DateTimeZone.setDefault(DateTimeZone.forID(tz.getID))
 
     db withSession { implicit session: Session =>
       JodaTest.ddl.create

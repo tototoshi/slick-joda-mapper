@@ -27,7 +27,6 @@
  */
 package com.github.tototoshi.slick.converter
 
-
 trait SqlTypeConverter[A, B] extends FromTypeConverter[A, B]
   with ToTypeConverter[A, B]
 

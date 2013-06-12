@@ -1,6 +1,6 @@
 package com.github.tototoshi.slick.converter
 
-import org.joda.time.{ DateTime, LocalDate, LocalTime }
+import org.joda.time.{ DateTimeZone, DateTime, LocalDate, LocalTime }
 import java.sql.Time
 import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
@@ -16,7 +16,9 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
 
   before {
     Locale.setDefault(Locale.JAPAN)
-    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Tokyo"))
+    val tz = TimeZone.getTimeZone("Asia/Tokyo")
+    TimeZone.setDefault(tz)
+    DateTimeZone.setDefault(DateTimeZone.forID(tz.getID))
   }
 
   describe("JodaLocalDateSqlDateConverter") {
