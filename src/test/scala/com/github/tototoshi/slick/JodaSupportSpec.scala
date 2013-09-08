@@ -27,7 +27,7 @@
  */
 package com.github.tototoshi.slick
 
-import org.scalatest._
+import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
 import com.github.tototoshi.slick.JodaSupport._
 import scala.slick.driver.PostgresDriver.simple._
@@ -35,6 +35,7 @@ import org.joda.time.{ DateTimeZone, DateTime, LocalDate, LocalTime }
 import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
 import java.util.{ TimeZone, Locale }
+import scala.slick.lifted.{ TableQuery, Tag }
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,
@@ -43,14 +44,14 @@ case class Jodas(localDate: LocalDate,
   optDateTime: Option[DateTime],
   optLocalTime: Option[LocalTime])
 
-object JodaTest extends Table[Jodas]("JODA_TEST") {
+class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
   def localDate = column[LocalDate]("LOCAL_DATE")
   def dateTime = column[DateTime]("DATE_TIME")
   def localTime = column[LocalTime]("LOCAL_TIME")
   def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
   def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
   def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
-  def * = localDate ~ dateTime ~ localTime ~ optLocalDate ~ optDateTime ~ optLocalTime <> (Jodas.apply _, Jodas.unapply _)
+  def * = (localDate, dateTime, localTime, optLocalDate, optDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
 }
 
 class JodaSupportSpec extends FunSpec
@@ -62,6 +63,8 @@ class JodaSupportSpec extends FunSpec
     user = "sa",
     password = null)
 
+  val jodaTest = TableQuery[JodaTest]
+
   before {
     Locale.setDefault(Locale.JAPAN)
     val tz = TimeZone.getTimeZone("Asia/Tokyo")
@@ -69,18 +72,18 @@ class JodaSupportSpec extends FunSpec
     DateTimeZone.setDefault(DateTimeZone.forID(tz.getID))
 
     db withSession { implicit session: Session =>
-      JodaTest.ddl.create
+      jodaTest.ddl.create
     }
   }
 
   after {
     db withSession { implicit session: Session =>
-      JodaTest.ddl.drop
+      jodaTest.ddl.drop
     }
   }
 
   def insertTestData()(implicit session: Session): Unit = {
-    JodaTest.insert(
+    jodaTest.insert(
       Jodas(
         new LocalDate(2012, 12, 4),
         new DateTime(2012, 12, 4, 0, 0, 0, 0),
@@ -90,7 +93,7 @@ class JodaSupportSpec extends FunSpec
         Some(new LocalTime(0))
       )
     )
-    JodaTest.insert(
+    jodaTest.insert(
       Jodas(
         new LocalDate(2012, 12, 5),
         new DateTime(2012, 12, 5, 0, 0, 0, 0),
@@ -101,7 +104,7 @@ class JodaSupportSpec extends FunSpec
 
       )
     )
-    JodaTest.insert(
+    jodaTest.insert(
       Jodas(
         new LocalDate(2012, 12, 6),
         new DateTime(2012, 12, 6, 0, 0, 0, 0),
@@ -118,7 +121,7 @@ class JodaSupportSpec extends FunSpec
     it("should enable us to use joda-time with slick") {
       db withSession { implicit session: Session =>
         insertTestData()
-        val record = (for { j <- JodaTest } yield j).list()
+        val record = (for { j <- jodaTest } yield j).list()
         record should have size (3)
       }
     }
@@ -152,7 +155,7 @@ class JodaSupportSpec extends FunSpec
         insertTestData()
 
         val q1 = for {
-          jt <- JodaTest
+          jt <- jodaTest
           if jt.localDate > new LocalDate(2012, 12, 5)
         } yield jt
 
@@ -165,7 +168,7 @@ class JodaSupportSpec extends FunSpec
         insertTestData()
 
         val q1 = for {
-          jt <- JodaTest
+          jt <- jodaTest
           if jt.localDate === new LocalDate(2012, 12, 5)
         } yield jt
 
@@ -174,7 +177,7 @@ class JodaSupportSpec extends FunSpec
         res1.headOption.map(_.localDate) should be(Some(new LocalDate(2012, 12, 5)))
 
         val q2 = for {
-          jt <- JodaTest
+          jt <- jodaTest
           if jt.localDate =!= new LocalDate(2012, 12, 5)
         } yield jt
         val res2 = q2.list

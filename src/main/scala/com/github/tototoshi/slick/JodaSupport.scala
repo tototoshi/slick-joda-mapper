@@ -29,9 +29,9 @@ package com.github.tototoshi.slick
 
 import scala.slick.driver._
 
-object JodaLocalDateSupportDelegate extends JodaLocalDateMapper with ExtendedDriver
-object JodaDateTimeSupportDelegate extends JodaDateTimeMapper with ExtendedDriver
-object JodaLocalTimeSupportDelegate extends JodaLocalTimeMapper with ExtendedDriver
+object JodaLocalDateSupportDelegate extends JodaLocalDateMapper with JdbcDriver
+object JodaDateTimeSupportDelegate extends JodaDateTimeMapper with JdbcDriver
+object JodaLocalTimeSupportDelegate extends JodaLocalTimeMapper with JdbcDriver
 
 trait JodaLocalDateSupport {
   implicit val localDateTypeMapper = JodaLocalDateSupportDelegate.TypeMapper
