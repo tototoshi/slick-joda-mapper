@@ -14,7 +14,7 @@ libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.3.0"
 ```
 
 ## For Slick 2.x
-```
+```scala
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
 libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "1.0.0-SNAPSHOT"
