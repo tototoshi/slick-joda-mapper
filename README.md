@@ -3,14 +3,14 @@
 [![Build Status](https://travis-ci.org/tototoshi/slick-joda-mapper.png)](https://travis-ci.org/tototoshi/slick-joda-mapper)
 
 Enables you to use joda-time with Slick.
-You can persist `DateTime`, `LocalDate`, `LocalTime` with Slick.
+You can persist `DateTime`, `LocalDateTime`, `LocalDate`, `LocalTime` with Slick.
 
 # Install
 
 ## For Slick 1.x
 
 ```scala
-libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.3.0"
+libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.0"
 ```
 
 ## For Slick 2.x
