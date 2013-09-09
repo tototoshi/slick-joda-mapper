@@ -29,8 +29,8 @@
 package com.github.tototoshi.slick
 
 import scala.slick.driver.{ JdbcDriver }
-import org.joda.time.{ LocalTime, DateTime, LocalDate }
-import com.github.tototoshi.slick.converter.{ JodaLocalTimeSqlTimeConverter, JodaDateTimeSqlTimestampConverter, JodaLocalDateSqlDateConverter }
+import org.joda.time.{ LocalDateTime, LocalTime, DateTime, LocalDate }
+import com.github.tototoshi.slick.converter.{ JodaLocalDateTimeSqlTimestampConverter, JodaLocalTimeSqlTimeConverter, JodaDateTimeSqlTimestampConverter, JodaLocalDateSqlDateConverter }
 import java.sql.{ Time, Timestamp, Date }
 import scala.slick.profile.BasicProfile
 import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
@@ -88,6 +88,35 @@ trait JodaDateTimeMapper { driver: JdbcDriver =>
   }
 
   object JodaSetParameter extends JodaSetParameter[Timestamp, DateTime] with JodaDateTimeSqlTimestampConverter {
+    def set(rs: PositionedParameters, d: Timestamp): Unit = rs.setTimestamp(d)
+    def setOption(rs: PositionedParameters, d: Option[Timestamp]): Unit = rs.setTimestampOption(d)
+  }
+
+}
+
+trait JodaLocalDateTimeMapper extends JodaLocalDateTimeSqlTimestampConverter { driver: JdbcDriver =>
+
+  object TypeMapper extends DriverJdbcType[LocalDateTime]
+      with JodaLocalDateTimeSqlTimestampConverter {
+    def zero = new LocalDateTime(0L)
+    def sqlType = java.sql.Types.TIMESTAMP
+    def setValue(v: LocalDateTime, p: PositionedParameters) =
+      p.setTimestamp(toSqlType(v))
+    def setOption(v: Option[LocalDateTime], p: PositionedParameters) =
+      p.setTimestampOption(v.map(toSqlType))
+    def nextValue(r: PositionedResult) = {
+      fromSqlType(r.nextTimestamp)
+    }
+    def updateValue(v: LocalDateTime, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+    override def valueToSQLLiteral(value: LocalDateTime) = "{ts '" + toSqlType(value).toString + "'}"
+  }
+
+  object JodaGetResult extends JodaGetResult[Timestamp, LocalDateTime] with JodaLocalDateTimeSqlTimestampConverter {
+    def next(rs: PositionedResult): Timestamp = rs.nextTimestamp()
+    def nextOption(rs: PositionedResult): Option[Timestamp] = rs.nextTimestampOption()
+  }
+
+  object JodaSetParameter extends JodaSetParameter[Timestamp, LocalDateTime] with JodaLocalDateTimeSqlTimestampConverter {
     def set(rs: PositionedParameters, d: Timestamp): Unit = rs.setTimestamp(d)
     def setOption(rs: PositionedParameters, d: Option[Timestamp]): Unit = rs.setTimestampOption(d)
   }

@@ -28,7 +28,7 @@
 
 package com.github.tototoshi.slick
 
-import org.joda.time.{ LocalTime, LocalDate, DateTime }
+import org.joda.time.{ LocalDateTime, LocalTime, LocalDate, DateTime }
 import com.github.tototoshi.slick.converter._
 
 object Converters {
@@ -38,6 +38,14 @@ object Converters {
   }
 
   implicit class WrappedDateTimeOption(d: Option[DateTime]) extends JodaDateTimeSqlTimestampConverter {
+    def toSqlTimestampOption(): Option[java.sql.Timestamp] = d.map(toSqlType)
+  }
+
+  implicit class WrappedLocalDateTime(d: LocalDateTime) extends JodaLocalDateTimeSqlTimestampConverter {
+    def toSqlTimestamp(): java.sql.Timestamp = toSqlType(d)
+  }
+
+  implicit class WrappedLocalDateTimeOption(d: Option[LocalDateTime]) extends JodaLocalDateTimeSqlTimestampConverter {
     def toSqlTimestampOption(): Option[java.sql.Timestamp] = d.map(toSqlType)
   }
 
@@ -63,6 +71,14 @@ object Converters {
 
   implicit class WrappedSqlTimestampOption(t: Option[java.sql.Timestamp]) extends JodaDateTimeSqlTimestampConverter {
     def toDateTimeOption(): Option[DateTime] = t.map(fromSqlType)
+  }
+
+  implicit class WrappedSqlTimestampForLocalDateTime(t: java.sql.Timestamp) extends JodaLocalDateTimeSqlTimestampConverter {
+    def toLocalDateTime(): LocalDateTime = fromSqlType(t)
+  }
+
+  implicit class WrappedSqlTimestampOptionForLocalDateTime(t: Option[java.sql.Timestamp]) extends JodaLocalDateTimeSqlTimestampConverter {
+    def toLocalDateTimeOption(): Option[LocalDateTime] = t.map(fromSqlType)
   }
 
   implicit class WrappedSqlTime(t: java.sql.Time) extends JodaLocalTimeSqlTimeConverter {

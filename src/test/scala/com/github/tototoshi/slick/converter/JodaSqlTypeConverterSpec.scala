@@ -1,6 +1,6 @@
 package com.github.tototoshi.slick.converter
 
-import org.joda.time.{ DateTimeZone, DateTime, LocalDate, LocalTime }
+import org.joda.time._
 import java.sql.Time
 import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
@@ -11,6 +11,7 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
   def fixture = new {
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
     val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}
+    val localDateTimeConverter = new JodaLocalDateTimeSqlTimestampConverter {}
     val localTimeConverter = new JodaLocalTimeSqlTimeConverter {}
   }
 
@@ -54,13 +55,25 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
 
   }
 
-  describe("JodaLocalTimeSqlTimeConverter") {
+  describe("JodaLocalDateTimeSqlDateConverter") {
 
-    val offset = {
-      import java.util.Calendar
-      val cal = Calendar.getInstance
-      cal.get(Calendar.ZONE_OFFSET)
+    it("should convert LocalDateTime to java.sql.Timestamp") {
+      fixture.localDateTimeConverter.toSqlType(null) should be(null)
+      val current = LocalDateTime.now
+      val timestamp = current.toDate.getTime
+      fixture.localDateTimeConverter.toSqlType(current).getTime should be(timestamp)
     }
+
+    it("should convert java.sql.Timestamp to LocalDateTime") {
+      fixture.localDateTimeConverter.fromSqlType(null) should be(null)
+      val current = LocalDateTime.now
+      val timestamp = current.toDate.getTime
+      fixture.localDateTimeConverter.fromSqlType(new java.sql.Timestamp(timestamp)) should be(current)
+    }
+
+  }
+
+  describe("JodaLocalTimeSqlTimeConverter") {
 
     it("should convert LocalTime to java.sql.Time") {
       fixture.localTimeConverter.fromSqlType(null) should be(null)
