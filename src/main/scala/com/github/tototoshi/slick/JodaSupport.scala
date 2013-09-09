@@ -31,6 +31,7 @@ import scala.slick.driver._
 
 object JodaLocalDateSupportDelegate extends JodaLocalDateMapper with ExtendedDriver
 object JodaDateTimeSupportDelegate extends JodaDateTimeMapper with ExtendedDriver
+object JodaLocalDateTimeSupportDelegate extends JodaLocalDateTimeMapper with ExtendedDriver
 object JodaLocalTimeSupportDelegate extends JodaLocalTimeMapper with ExtendedDriver
 
 trait JodaLocalDateSupport {
@@ -49,6 +50,14 @@ trait JodaDateTimeSupport {
   implicit val setDatetimeOptionParameter = JodaDateTimeSupportDelegate.JodaSetParameter.setJodaOptionParameter
 }
 
+trait JodaLocalDateTimeSupport {
+  implicit val localDatetimeTypeMapper = JodaLocalDateTimeSupportDelegate.TypeMapper
+  implicit val getLocalDatetimeResult = JodaLocalDateTimeSupportDelegate.JodaGetResult.getResult
+  implicit val getLocalDatetimeOptionResult = JodaLocalDateTimeSupportDelegate.JodaGetResult.getOptionResult
+  implicit val setLocalDatetimeParameter = JodaLocalDateTimeSupportDelegate.JodaSetParameter.setJodaParameter
+  implicit val setLocalDatetimeOptionParameter = JodaLocalDateTimeSupportDelegate.JodaSetParameter.setJodaOptionParameter
+}
+
 trait JodaLocalTimeSupport {
   implicit val localTimeTypeMapper = JodaLocalTimeSupportDelegate.TypeMapper
   implicit val getLocalTimeResult = JodaLocalTimeSupportDelegate.JodaGetResult.getResult
@@ -59,8 +68,10 @@ trait JodaLocalTimeSupport {
 
 object JodaLocalDateSupport extends JodaLocalDateSupport
 object JodaDateTimeSupport extends JodaDateTimeSupport
+object JodaLocalDateTimeSupport extends JodaLocalDateTimeSupport
 object JodaLocalTimeSupport extends JodaLocalTimeSupport
 
 object JodaSupport extends JodaLocalDateSupport
   with JodaDateTimeSupport
+  with JodaLocalDateTimeSupport
   with JodaLocalTimeSupport
