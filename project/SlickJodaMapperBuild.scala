@@ -15,7 +15,7 @@ object SlickJodaMapperBuild extends Build {
       libraryDependencies ++= Seq(
         "joda-time" % "joda-time" % "2.2",
         "org.joda" % "joda-convert" % "1.3.1",
-        "com.typesafe.slick" %% "slick" % "2.0.0-M2" % "provided",
+        "com.typesafe.slick" %% "slick" % "2.0.0-M3" % "provided",
         "com.h2database" % "h2" % "[1.3,)" % "test",
         "org.scalatest" %% "scalatest" % "1.9.1" % "test"
       ),
@@ -62,4 +62,3 @@ object SlickJodaMapperBuild extends Build {
     </developers>
 
 }
-
