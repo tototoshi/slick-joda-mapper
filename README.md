@@ -14,6 +14,8 @@ libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.0"
 ```
 
 ## For Slick 2.x
+Snapshot version is built with 2.0.0-M3 now. 
+Please build from source if you are in trouble with the problem related to compatibility.
 
 ```scala
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
