@@ -22,7 +22,7 @@ resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositori
 
 libraryDependencies += Seq(
     "com.typesafe.slick" %% "slick" % "2.0.0-M3",
-    "joda-time" % "joda-time" % "2.3",
+    "joda-time" % "joda-time" % "2.3", // Joda dependencies is now in `provided` scope
     "org.joda" % "joda-convert" % "1.5",
     "com.github.tototoshi" %% "slick-joda-mapper" % "1.0.0-SNAPSHOT"
 )
