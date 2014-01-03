@@ -29,14 +29,13 @@ package com.github.tototoshi.slick
 
 import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
-import com.github.tototoshi.slick.JodaSupport._
-import scala.slick.driver.PostgresDriver.simple._
+import scala.slick.driver.H2Driver.simple._
+import com.github.tototoshi.slick.H2JodaSupport._
 import org.joda.time._
 import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
 import java.util.{ TimeZone, Locale }
 import scala.slick.lifted.{ TableQuery, Tag }
-import scala.Some
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,

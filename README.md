@@ -5,7 +5,7 @@
 Enables you to use joda-time with Slick.
 You can persist `DateTime`, `LocalDateTime`, `LocalDate`, `LocalTime` with Slick.
 
-# Install
+# Usage
 
 ## For Slick 1.x
 
@@ -13,8 +13,12 @@ You can persist `DateTime`, `LocalDateTime`, `LocalDate`, `LocalTime` with Slick
 libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.0"
 ```
 
+```scala
+import com.github.tototoshi.slick.JodaSupport._
+```
+
 ## For Slick 2.x
-Snapshot version is built with 2.0.0-M3 now.
+Snapshot version is built with 2.0.0-RC1 now.
 Please build from source if you are in trouble with the problem related to compatibility.
 
 ```scala
@@ -28,13 +32,12 @@ libraryDependencies += Seq(
 )
 ```
 
-# Usage
+Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) class suitable for the database you use.
 
 ```scala
-import com.github.tototoshi.slick.JodaSupport._
+import scala.slick.driver.H2Driver.simple._
+import com.github.tototoshi.slick.H2JodaSupport._
 ```
-
-That's all.
 
 # Example
 
