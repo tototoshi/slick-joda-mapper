@@ -39,23 +39,27 @@ import scala.slick.lifted.{ TableQuery, Tag }
 
 case class Jodas(localDate: LocalDate,
   dateTime: DateTime,
+  instant: Instant,
   localDateTime: LocalDateTime,
   localTime: LocalTime,
   optLocalDate: Option[LocalDate],
   optDateTime: Option[DateTime],
+  optInstant: Option[Instant],
   optLocalDateTime: Option[LocalDateTime],
   optLocalTime: Option[LocalTime])
 
 class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
   def localDate = column[LocalDate]("LOCAL_DATE")
   def dateTime = column[DateTime]("DATE_TIME")
+  def instant = column[Instant]("INSTANT")
   def localDateTime = column[LocalDateTime]("LOCAL_DATE_TIME")
   def localTime = column[LocalTime]("LOCAL_TIME")
   def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
   def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
+  def optInstant = column[Option[Instant]]("OPT_INSTANT")
   def optLocalDateTime = column[Option[LocalDateTime]]("OPT_LOCAL_DATE_TIME")
   def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
-  def * = (localDate, dateTime, localDateTime, localTime, optLocalDate, optDateTime, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
+  def * = (localDate, dateTime, instant, localDateTime, localTime, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
 }
 
 class JodaSupportSpec extends FunSpec
@@ -91,10 +95,12 @@ class JodaSupportSpec extends FunSpec
       Jodas(
         new LocalDate(2012, 12, 4),
         new DateTime(2012, 12, 4, 0, 0, 0, 0),
+        new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 4, 0, 0, 0, 0),
         new LocalTime(0),
         Some(new LocalDate(2012, 12, 4)),
         Some(new DateTime(2012, 12, 4, 0, 0, 0, 0)),
+        Some(new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant),
         Some(new LocalDateTime(2012, 12, 4, 0, 0, 0, 0)),
         Some(new LocalTime(0))
       )
@@ -103,9 +109,11 @@ class JodaSupportSpec extends FunSpec
       Jodas(
         new LocalDate(2012, 12, 5),
         new DateTime(2012, 12, 5, 0, 0, 0, 0),
+        new DateTime(2012, 12, 5, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 5, 0, 0, 0, 0),
         new LocalTime(0),
         Some(new LocalDate(2012, 12, 5)),
+        None,
         None,
         None,
         Some(new LocalTime(0))
@@ -116,9 +124,11 @@ class JodaSupportSpec extends FunSpec
       Jodas(
         new LocalDate(2012, 12, 6),
         new DateTime(2012, 12, 6, 0, 0, 0, 0),
+        new DateTime(2012, 12, 6, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 6, 0, 0, 0, 0),
         new LocalTime(0),
         Some(new LocalDate(2012, 12, 6)),
+        None,
         None,
         None,
         Some(new LocalTime(0))
@@ -132,7 +142,7 @@ class JodaSupportSpec extends FunSpec
       db withSession { implicit session: Session =>
         insertTestData()
         val record = (for { j <- jodaTest } yield j).list()
-        record should have size (3)
+        record should have size 3
       }
     }
 
@@ -143,6 +153,8 @@ class JodaSupportSpec extends FunSpec
           .as[Option[LocalDate]].first should be(Some(new LocalDate(2012, 12, 4)))
         sql"SELECT opt_date_time FROM joda_test WHERE date_time = ${new DateTime(2012, 12, 4, 0, 0, 0, 0)}"
           .as[Option[DateTime]].first should be(Some(new DateTime(2012, 12, 4, 0, 0, 0, 0)))
+        sql"SELECT opt_instant FROM joda_test WHERE instant = ${new DateTime(2012, 12, 4, 0, 0, 0, 0)}"
+          .as[Option[Instant]].first should be(Some(new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant))
         sql"SELECT opt_local_date_time FROM joda_test WHERE local_date_time = ${new LocalDateTime(2012, 12, 4, 0, 0, 0, 0)}"
           .as[Option[LocalDateTime]].first should be(Some(new LocalDateTime(2012, 12, 4, 0, 0, 0, 0)))
         sql"SELECT opt_local_time FROM joda_test WHERE local_time = ${new LocalTime(0)}"
@@ -151,16 +163,18 @@ class JodaSupportSpec extends FunSpec
           .as[LocalDate].first should be(new LocalDate(2012, 12, 5))
         sql"SELECT date_time FROM joda_test WHERE opt_date_time = ${Some(new DateTime(2012, 12, 4, 0, 0, 0, 0))}"
           .as[DateTime].first should be(new DateTime(2012, 12, 4, 0, 0, 0, 0))
+        sql"SELECT instant FROM joda_test WHERE opt_instant = ${Some(new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant)}"
+          .as[Instant].first should be(new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant)
         sql"SELECT local_date_time FROM joda_test WHERE opt_local_date_time = ${Some(new LocalDateTime(2012, 12, 4, 0, 0, 0, 0))}"
           .as[LocalDateTime].first should be(new LocalDateTime(2012, 12, 4, 0, 0, 0, 0))
         sql"SELECT local_time FROM joda_test WHERE opt_local_time = ${Some(new LocalTime(0))}"
           .as[LocalTime].first should be(new LocalTime(0))
 
-        implicit val getResult: GetResult[(LocalDate, DateTime, LocalDateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<, r.<<))
-        implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
+        implicit val getResult: GetResult[(LocalDate, DateTime, Instant, LocalDateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<, r.<<, r.<<))
+        implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
-        sql"SELECT local_date, date_time, local_date_time, local_time FROM joda_test".as[(LocalDate, DateTime, LocalDateTime, LocalTime)].list() should have size (3)
-        sql"SELECT local_date, date_time, local_date_time, local_time, opt_local_date, opt_date_time, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size (3)
+        sql"SELECT local_date, date_time, instant, local_date_time, local_time FROM joda_test".as[(LocalDate, DateTime, Instant, LocalDateTime, LocalTime)].list() should have size 3
+        sql"SELECT local_date, date_time, instant, local_date_time, local_time, opt_local_date, opt_date_time, opt_instant, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size 3
       }
     }
 
@@ -173,7 +187,7 @@ class JodaSupportSpec extends FunSpec
           if jt.localDate > new LocalDate(2012, 12, 5)
         } yield jt
 
-        q1.list should have size (1)
+        q1.list should have size 1
       }
     }
 
@@ -187,7 +201,7 @@ class JodaSupportSpec extends FunSpec
         } yield jt
 
         val res1 = q1.list
-        res1 should have size (1)
+        res1 should have size 1
         res1.headOption.map(_.localDate) should be(Some(new LocalDate(2012, 12, 5)))
 
         val q2 = for {
@@ -195,9 +209,9 @@ class JodaSupportSpec extends FunSpec
           if jt.localDate =!= new LocalDate(2012, 12, 5)
         } yield jt
         val res2 = q2.list
-        res2 should have size (2)
-        res2.lift(1).map(_.localDate) should not be (Some(new LocalDate(2012, 12, 5)))
-        res2.lift(2).map(_.localDate) should not be (Some(new LocalDate(2012, 12, 5)))
+        res2 should have size 2
+        res2.lift(1).map(_.localDate) should not be Some(new LocalDate(2012, 12, 5))
+        res2.lift(2).map(_.localDate) should not be Some(new LocalDate(2012, 12, 5))
       }
     }
 

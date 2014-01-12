@@ -27,7 +27,7 @@
  */
 package com.github.tototoshi.slick.converter
 
-import org.joda.time.{ LocalDateTime, LocalDate, DateTime, LocalTime }
+import org.joda.time._
 import java.sql.{ Timestamp, Time }
 
 trait JodaLocalDateSqlDateConverter
@@ -48,6 +48,17 @@ trait JodaDateTimeSqlTimestampConverter
     if (t == null) null else new DateTime(t.getTime)
 
   def toSqlType(t: DateTime): java.sql.Timestamp =
+    if (t == null) null else new java.sql.Timestamp(t.getMillis)
+
+}
+
+trait JodaInstantSqlTimestampConverter
+    extends SqlTypeConverter[Timestamp, Instant] {
+
+  def fromSqlType(t: java.sql.Timestamp): Instant =
+    if (t == null) null else new Instant(t.getTime)
+
+  def toSqlType(t: Instant): java.sql.Timestamp =
     if (t == null) null else new java.sql.Timestamp(t.getMillis)
 
 }

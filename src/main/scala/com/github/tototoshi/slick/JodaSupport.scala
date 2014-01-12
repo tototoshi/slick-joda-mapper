@@ -32,6 +32,7 @@ import scala.slick.driver._
 class GenericJodaSupport(val driver: JdbcDriver) {
   protected val localDateMapperDelegate = new JodaLocalDateMapper(driver)
   protected val dateTimeMapperDelegate = new JodaDateTimeMapper(driver)
+  protected val instantMapperDelegate = new JodaInstantMapper(driver)
   protected val localDateTimeMapperDelegate = new JodaLocalDateTimeMapper(driver)
   protected val localTimeMapperDelegate = new JodaLocalTimeMapper(driver)
 
@@ -46,6 +47,12 @@ class GenericJodaSupport(val driver: JdbcDriver) {
   implicit val getDatetimeOptionResult = dateTimeMapperDelegate.JodaGetResult.getOptionResult
   implicit val setDatetimeParameter = dateTimeMapperDelegate.JodaSetParameter.setJodaParameter
   implicit val setDatetimeOptionParameter = dateTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
+
+  implicit val instantTypeMapper = instantMapperDelegate.TypeMapper
+  implicit val getInstantResult = instantMapperDelegate.JodaGetResult.getResult
+  implicit val getInstantOptionResult = instantMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setInstantParameter = instantMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setInstantOptionParameter = instantMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
   implicit val localDatetimeTypeMapper = localDateTimeMapperDelegate.TypeMapper
   implicit val getLocalDatetimeResult = localDateTimeMapperDelegate.JodaGetResult.getResult

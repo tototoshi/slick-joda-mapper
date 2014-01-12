@@ -29,8 +29,8 @@
 package com.github.tototoshi.slick
 
 import scala.slick.driver.JdbcDriver
-import org.joda.time.{ LocalDateTime, LocalTime, DateTime, LocalDate }
-import com.github.tototoshi.slick.converter.{ JodaLocalDateTimeSqlTimestampConverter, JodaLocalTimeSqlTimeConverter, JodaDateTimeSqlTimestampConverter, JodaLocalDateSqlDateConverter }
+import org.joda.time._
+import com.github.tototoshi.slick.converter._
 import java.sql.{ Time, Timestamp, Date }
 import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
 
@@ -86,6 +86,35 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
   }
 
   object JodaSetParameter extends JodaSetParameter[Timestamp, DateTime] with JodaDateTimeSqlTimestampConverter {
+    def set(rs: PositionedParameters, d: Timestamp): Unit = rs.setTimestamp(d)
+    def setOption(rs: PositionedParameters, d: Option[Timestamp]): Unit = rs.setTimestampOption(d)
+  }
+
+}
+
+class JodaInstantMapper(val driver: JdbcDriver) {
+
+  object TypeMapper extends driver.DriverJdbcType[Instant]
+      with JodaInstantSqlTimestampConverter {
+    def zero = new DateTime(0L)
+    def sqlType = java.sql.Types.TIMESTAMP
+    def setValue(v: Instant, p: PositionedParameters) =
+      p.setTimestamp(toSqlType(v))
+    def setOption(v: Option[Instant], p: PositionedParameters) =
+      p.setTimestampOption(v.map(toSqlType))
+    def nextValue(r: PositionedResult) = {
+      fromSqlType(r.nextTimestamp())
+    }
+    def updateValue(v: Instant, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+    override def valueToSQLLiteral(value: Instant) = "{ts '" + toSqlType(value).toString + "'}"
+  }
+
+  object JodaGetResult extends JodaGetResult[Timestamp, Instant] with JodaInstantSqlTimestampConverter {
+    def next(rs: PositionedResult): Timestamp = rs.nextTimestamp()
+    def nextOption(rs: PositionedResult): Option[Timestamp] = rs.nextTimestampOption()
+  }
+
+  object JodaSetParameter extends JodaSetParameter[Timestamp, Instant] with JodaInstantSqlTimestampConverter {
     def set(rs: PositionedParameters, d: Timestamp): Unit = rs.setTimestamp(d)
     def setOption(rs: PositionedParameters, d: Option[Timestamp]): Unit = rs.setTimestampOption(d)
   }
