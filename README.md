@@ -24,7 +24,7 @@ Please build from source if you are in trouble with the problem related to compa
 ```scala
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
-libraryDependencies += Seq(
+libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "2.0.0-M3",
     "joda-time" % "joda-time" % "2.3", // Joda dependencies is now in `provided` scope
     "org.joda" % "joda-convert" % "1.5",
