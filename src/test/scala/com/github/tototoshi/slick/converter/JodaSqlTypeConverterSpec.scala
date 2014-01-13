@@ -11,6 +11,7 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
   def fixture = new {
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
     val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}
+    val instantConverter = new JodaInstantSqlTimestampConverter {}
     val localDateTimeConverter = new JodaLocalDateTimeSqlTimestampConverter {}
     val localTimeConverter = new JodaLocalTimeSqlTimeConverter {}
   }
@@ -37,7 +38,7 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
 
   }
 
-  describe("JodaDateTimeSqlDateConverter") {
+  describe("JodaDateTimeSqlTimestampConverter") {
 
     it("should convert DateTime to java.sql.Timestamp") {
       fixture.dateTimeConverter.toSqlType(null) should be(null)
@@ -51,6 +52,24 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
       val current = DateTime.now
       val timestamp = current.getMillis
       fixture.dateTimeConverter.fromSqlType(new java.sql.Timestamp(timestamp)) should be(current)
+    }
+
+  }
+
+  describe("JodaInstantSqlTimestampConverter") {
+
+    it("should convert Instant to java.sql.Timestamp") {
+      fixture.instantConverter.toSqlType(null) should be(null)
+      val current = Instant.now
+      val timestamp = current.getMillis
+      fixture.instantConverter.toSqlType(current).getTime should be(timestamp)
+    }
+
+    it("should convert java.sql.Timestamp to Instant") {
+      fixture.instantConverter.fromSqlType(null) should be(null)
+      val current = Instant.now
+      val timestamp = current.getMillis
+      fixture.instantConverter.fromSqlType(new java.sql.Timestamp(timestamp)) should be(current)
     }
 
   }
