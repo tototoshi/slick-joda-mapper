@@ -22,13 +22,11 @@ Snapshot version is built with 2.0.0-RC1 now.
 Please build from source if you are in trouble with the problem related to compatibility.
 
 ```scala
-resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
-
 libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "2.0.0-RC1",
+    "com.typesafe.slick" %% "slick" % "2.0.0",
     "joda-time" % "joda-time" % "2.3", // Joda dependencies is now in `provided` scope
     "org.joda" % "joda-convert" % "1.5",
-    "com.github.tototoshi" %% "slick-joda-mapper" % "1.0.0-SNAPSHOT"
+    "com.github.tototoshi" %% "slick-joda-mapper" % "1.0.0"
 )
 ```
 
