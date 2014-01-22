@@ -18,8 +18,6 @@ import com.github.tototoshi.slick.JodaSupport._
 ```
 
 ## For Slick 2.x
-Snapshot version is built with 2.0.0-RC1 now.
-Please build from source if you are in trouble with the problem related to compatibility.
 
 ```scala
 libraryDependencies ++= Seq(
