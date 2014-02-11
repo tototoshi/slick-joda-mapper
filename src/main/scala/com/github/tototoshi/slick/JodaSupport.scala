@@ -68,6 +68,7 @@ class GenericJodaSupport(val driver: JdbcDriver) {
 
 }
 
+object JdbcJodaSupport extends GenericJodaSupport(JdbcDriver)
 object H2JodaSupport extends GenericJodaSupport(H2Driver)
 object PostgresJodaSupport extends GenericJodaSupport(PostgresDriver)
 object MySQLJodaSupport extends GenericJodaSupport(MySQLDriver)
