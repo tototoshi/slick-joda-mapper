@@ -40,3 +40,9 @@ import com.github.tototoshi.slick.H2JodaSupport._
 
 https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/github/tototoshi/slick/JodaSupportSpec.scala
 
+
+# Changelog
+
+## 1.0.1
+ - Added JdbcJodaSupport.
+
