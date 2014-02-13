@@ -29,47 +29,51 @@ package com.github.tototoshi.slick
 
 import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest.matchers._
-import scala.slick.driver.H2Driver.simple._
-import com.github.tototoshi.slick.H2JodaSupport._
 import org.joda.time._
+import scala.slick.driver.JdbcDriver
 import scala.slick.jdbc.GetResult
 import scala.slick.jdbc.StaticQuery.interpolation
 import java.util.{ TimeZone, Locale }
-import scala.slick.lifted.{ TableQuery, Tag }
 
-case class Jodas(localDate: LocalDate,
-  dateTime: DateTime,
-  instant: Instant,
-  localDateTime: LocalDateTime,
-  localTime: LocalTime,
-  optLocalDate: Option[LocalDate],
-  optDateTime: Option[DateTime],
-  optInstant: Option[Instant],
-  optLocalDateTime: Option[LocalDateTime],
-  optLocalTime: Option[LocalTime])
-
-class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
-  def localDate = column[LocalDate]("LOCAL_DATE")
-  def dateTime = column[DateTime]("DATE_TIME")
-  def instant = column[Instant]("INSTANT")
-  def localDateTime = column[LocalDateTime]("LOCAL_DATE_TIME")
-  def localTime = column[LocalTime]("LOCAL_TIME")
-  def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
-  def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
-  def optInstant = column[Option[Instant]]("OPT_INSTANT")
-  def optLocalDateTime = column[Option[LocalDateTime]]("OPT_LOCAL_DATE_TIME")
-  def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
-  def * = (localDate, dateTime, instant, localDateTime, localTime, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
-}
-
-class JodaSupportSpec extends FunSpec
+abstract class JodaSupportSpec(
+  val driver: JdbcDriver,
+  val jodaSupport: GenericJodaSupport,
+  val jdbcUrl: String,
+  val jdbcDriver: String,
+  val jdbcUser: String,
+  val jdbcPassword: String) extends FunSpec
     with ShouldMatchers
     with BeforeAndAfter {
 
-  val db = Database.forURL("jdbc:h2:memory:test",
-    driver = "org.h2.Driver",
-    user = "sa",
-    password = null)
+  import driver.simple._
+  import jodaSupport._
+
+  case class Jodas(localDate: LocalDate,
+    dateTime: DateTime,
+    instant: Instant,
+    localDateTime: LocalDateTime,
+    localTime: LocalTime,
+    optLocalDate: Option[LocalDate],
+    optDateTime: Option[DateTime],
+    optInstant: Option[Instant],
+    optLocalDateTime: Option[LocalDateTime],
+    optLocalTime: Option[LocalTime])
+
+  class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
+    def localDate = column[LocalDate]("LOCAL_DATE")
+    def dateTime = column[DateTime]("DATE_TIME")
+    def instant = column[Instant]("INSTANT")
+    def localDateTime = column[LocalDateTime]("LOCAL_DATE_TIME")
+    def localTime = column[LocalTime]("LOCAL_TIME")
+    def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
+    def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
+    def optInstant = column[Option[Instant]]("OPT_INSTANT")
+    def optLocalDateTime = column[Option[LocalDateTime]]("OPT_LOCAL_DATE_TIME")
+    def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
+    def * = (localDate, dateTime, instant, localDateTime, localTime, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
+  }
+
+  val db = Database.forURL(url = jdbcUrl, user = jdbcUser, password = jdbcPassword, driver = jdbcDriver)
 
   val jodaTest = TableQuery[JodaTest]
 
@@ -218,3 +222,8 @@ class JodaSupportSpec extends FunSpec
   }
 }
 
+import scala.slick.driver._
+import com.github.tototoshi.slick._
+
+class JdbcJodaSupportSpec extends JodaSupportSpec(JdbcDriver, JdbcJodaSupport, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
+class H2JodaSupportSpec extends JodaSupportSpec(H2Driver, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
