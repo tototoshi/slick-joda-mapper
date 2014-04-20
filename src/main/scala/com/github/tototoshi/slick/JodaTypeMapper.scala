@@ -34,6 +34,34 @@ import com.github.tototoshi.slick.converter._
 import java.sql.{ Time, Timestamp, Date }
 import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
 
+class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
+
+  object TypeMapper extends driver.DriverJdbcType[DateTimeZone]
+      with JodaDateTimeZoneSqlStringConverter {
+    def sqlType = java.sql.Types.VARCHAR
+    def setValue(v: DateTimeZone, p: PositionedParameters) =
+      p.setString(toSqlType(v))
+    def setOption(v: Option[DateTimeZone], p: PositionedParameters) =
+      p.setStringOption(v.map(toSqlType))
+    def nextValue(r: PositionedResult) = {
+      fromSqlType(r.nextString())
+    }
+    def updateValue(v: DateTimeZone, r: PositionedResult) = r.updateString(toSqlType(v))
+    override def valueToSQLLiteral(value: DateTimeZone) = toSqlType(value)
+  }
+
+  object JodaGetResult extends JodaGetResult[String, DateTimeZone] with JodaDateTimeZoneSqlStringConverter {
+    def next(rs: PositionedResult): String = rs.nextString()
+    def nextOption(rs: PositionedResult): Option[String] = rs.nextStringOption()
+  }
+
+  object JodaSetParameter extends JodaSetParameter[String, DateTimeZone] with JodaDateTimeZoneSqlStringConverter {
+    def set(rs: PositionedParameters, z: String): Unit = rs.setString(z)
+    def setOption(rs: PositionedParameters, z: Option[String]): Unit = rs.setStringOption(z)
+  }
+
+}
+
 class JodaLocalDateMapper(val driver: JdbcDriver) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalDate]

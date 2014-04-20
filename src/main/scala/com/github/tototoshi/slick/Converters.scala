@@ -28,10 +28,14 @@
 
 package com.github.tototoshi.slick
 
-import org.joda.time.{ LocalDateTime, LocalTime, LocalDate, DateTime }
+import org.joda.time.{ LocalDateTime, LocalTime, LocalDate, DateTime, DateTimeZone }
 import com.github.tototoshi.slick.converter._
 
 object Converters {
+
+  implicit class WrappedDateTimeZone(z: DateTimeZone) extends JodaDateTimeZoneSqlStringConverter {
+    def toSqlString(): String = toSqlType(z)
+  }
 
   implicit class WrappedDateTime(d: DateTime) extends JodaDateTimeSqlTimestampConverter {
     def toSqlTimestamp(): java.sql.Timestamp = toSqlType(d)

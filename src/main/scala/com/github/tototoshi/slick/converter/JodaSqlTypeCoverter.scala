@@ -30,6 +30,16 @@ package com.github.tototoshi.slick.converter
 import org.joda.time._
 import java.sql.{ Timestamp, Time }
 
+trait JodaDateTimeZoneSqlStringConverter
+    extends SqlTypeConverter[String, DateTimeZone] {
+
+  def toSqlType(z: DateTimeZone): String =
+    if (z == null) null else z.getID
+
+  def fromSqlType(z: String): DateTimeZone =
+    if (z == null) null else DateTimeZone.forID(z)
+}
+
 trait JodaLocalDateSqlDateConverter
     extends SqlTypeConverter[java.sql.Date, LocalDate] {
 

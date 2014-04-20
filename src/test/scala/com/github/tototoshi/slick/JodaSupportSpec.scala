@@ -48,11 +48,13 @@ abstract class JodaSupportSpec(
   import driver.simple._
   import jodaSupport._
 
-  case class Jodas(localDate: LocalDate,
+  case class Jodas(dateTimeZone: DateTimeZone,
+    localDate: LocalDate,
     dateTime: DateTime,
     instant: Instant,
     localDateTime: LocalDateTime,
     localTime: LocalTime,
+    optDateTimeZone: Option[DateTimeZone],
     optLocalDate: Option[LocalDate],
     optDateTime: Option[DateTime],
     optInstant: Option[Instant],
@@ -60,17 +62,19 @@ abstract class JodaSupportSpec(
     optLocalTime: Option[LocalTime])
 
   class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
+    def dateTimeZone = column[DateTimeZone]("DATE_TIME_ZONE")
     def localDate = column[LocalDate]("LOCAL_DATE")
     def dateTime = column[DateTime]("DATE_TIME")
     def instant = column[Instant]("INSTANT")
     def localDateTime = column[LocalDateTime]("LOCAL_DATE_TIME")
     def localTime = column[LocalTime]("LOCAL_TIME")
+    def optDateTimeZone = column[Option[DateTimeZone]]("OPT_DATE_TIME_ZONE")
     def optLocalDate = column[Option[LocalDate]]("OPT_LOCAL_DATE")
     def optDateTime = column[Option[DateTime]]("OPT_DATE_TIME")
     def optInstant = column[Option[Instant]]("OPT_INSTANT")
     def optLocalDateTime = column[Option[LocalDateTime]]("OPT_LOCAL_DATE_TIME")
     def optLocalTime = column[Option[LocalTime]]("OPT_LOCAL_TIME")
-    def * = (localDate, dateTime, instant, localDateTime, localTime, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
+    def * = (dateTimeZone, localDate, dateTime, instant, localDateTime, localTime, optDateTimeZone, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
   }
 
   val db = Database.forURL(url = jdbcUrl, user = jdbcUser, password = jdbcPassword, driver = jdbcDriver)
@@ -97,11 +101,13 @@ abstract class JodaSupportSpec(
   def insertTestData()(implicit session: Session): Unit = {
     jodaTest.insert(
       Jodas(
+        DateTimeZone.forID("Asia/Tokyo"),
         new LocalDate(2012, 12, 4),
         new DateTime(2012, 12, 4, 0, 0, 0, 0),
         new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 4, 0, 0, 0, 0),
         new LocalTime(0),
+        Some(DateTimeZone.forID("Asia/Tokyo")),
         Some(new LocalDate(2012, 12, 4)),
         Some(new DateTime(2012, 12, 4, 0, 0, 0, 0)),
         Some(new DateTime(2012, 12, 4, 0, 0, 0, 0).toInstant),
@@ -111,11 +117,13 @@ abstract class JodaSupportSpec(
     )
     jodaTest.insert(
       Jodas(
+        DateTimeZone.forID("Europe/London"),
         new LocalDate(2012, 12, 5),
         new DateTime(2012, 12, 5, 0, 0, 0, 0),
         new DateTime(2012, 12, 5, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 5, 0, 0, 0, 0),
         new LocalTime(0),
+        Some(DateTimeZone.forID("Europe/London")),
         Some(new LocalDate(2012, 12, 5)),
         None,
         None,
@@ -126,11 +134,13 @@ abstract class JodaSupportSpec(
     )
     jodaTest.insert(
       Jodas(
+        DateTimeZone.forID("America/New_York"),
         new LocalDate(2012, 12, 6),
         new DateTime(2012, 12, 6, 0, 0, 0, 0),
         new DateTime(2012, 12, 6, 0, 0, 0, 0).toInstant,
         new LocalDateTime(2012, 12, 6, 0, 0, 0, 0),
         new LocalTime(0),
+        Some(DateTimeZone.forID("America/New_York")),
         Some(new LocalDate(2012, 12, 6)),
         None,
         None,
@@ -153,6 +163,8 @@ abstract class JodaSupportSpec(
     it("should enable us to use joda-time with string interpolation API") {
       db withSession { implicit session: Session =>
         insertTestData()
+        sql"SELECT opt_date_time_zone FROM joda_test WHERE date_time_zone = 'Asia/Tokyo'"
+          .as[Option[DateTimeZone]].first should be(Some(DateTimeZone.forID("Asia/Tokyo")))
         sql"SELECT opt_local_date FROM joda_test WHERE local_date = ${new LocalDate(2012, 12, 4)}"
           .as[Option[LocalDate]].first should be(Some(new LocalDate(2012, 12, 4)))
         sql"SELECT opt_date_time FROM joda_test WHERE date_time = ${new DateTime(2012, 12, 4, 0, 0, 0, 0)}"
@@ -174,11 +186,11 @@ abstract class JodaSupportSpec(
         sql"SELECT local_time FROM joda_test WHERE opt_local_time = ${Some(new LocalTime(0))}"
           .as[LocalTime].first should be(new LocalTime(0))
 
-        implicit val getResult: GetResult[(LocalDate, DateTime, Instant, LocalDateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<, r.<<, r.<<))
-        implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
+        implicit val getResult: GetResult[(DateTimeZone, LocalDate, DateTime, Instant, LocalDateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
+        implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
-        sql"SELECT local_date, date_time, instant, local_date_time, local_time FROM joda_test".as[(LocalDate, DateTime, Instant, LocalDateTime, LocalTime)].list() should have size 3
-        sql"SELECT local_date, date_time, instant, local_date_time, local_time, opt_local_date, opt_date_time, opt_instant, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size 3
+        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time FROM joda_test".as[(DateTimeZone, LocalDate, DateTime, Instant, LocalDateTime, LocalTime)].list() should have size 3
+        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time, opt_date_time_zone, opt_local_date, opt_date_time, opt_instant, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size 3
       }
     }
 
