@@ -30,11 +30,18 @@ package com.github.tototoshi.slick
 import scala.slick.driver._
 
 class GenericJodaSupport(val driver: JdbcDriver) {
+  protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(driver)
   protected val localDateMapperDelegate = new JodaLocalDateMapper(driver)
   protected val dateTimeMapperDelegate = new JodaDateTimeMapper(driver)
   protected val instantMapperDelegate = new JodaInstantMapper(driver)
   protected val localDateTimeMapperDelegate = new JodaLocalDateTimeMapper(driver)
   protected val localTimeMapperDelegate = new JodaLocalTimeMapper(driver)
+
+  implicit val dateTimeZoneTypeMapper = dateTimeZoneMapperDelegate.TypeMapper
+  implicit val getDateTimeZoneResult = dateTimeZoneMapperDelegate.JodaGetResult.getResult
+  implicit val getDateTimeZoneOptionResult = dateTimeZoneMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setDateTimeZoneParameter = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setDateTimeZoneOptionParameter = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
   implicit val localDateTypeMapper = localDateMapperDelegate.TypeMapper
   implicit val getLocalDateResult = localDateMapperDelegate.JodaGetResult.getResult

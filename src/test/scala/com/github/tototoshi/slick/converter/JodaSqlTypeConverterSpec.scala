@@ -9,6 +9,7 @@ import java.util.{ TimeZone, Locale }
 class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
 
   def fixture = new {
+    val dateTimeZoneConverter = new JodaDateTimeZoneSqlStringConverter {}
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
     val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}
     val instantConverter = new JodaInstantSqlTimestampConverter {}
@@ -21,6 +22,21 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
     val tz = TimeZone.getTimeZone("Asia/Tokyo")
     TimeZone.setDefault(tz)
     DateTimeZone.setDefault(DateTimeZone.forID(tz.getID))
+  }
+
+  describe("JodaDateTimeZoneSqlStringConverter") {
+
+    it("should convert DateTimeZone to String") {
+      fixture.dateTimeZoneConverter.toSqlType(null) should be(null)
+      val timezone = DateTimeZone.forID("Asia/Tokyo")
+      fixture.dateTimeZoneConverter.toSqlType(timezone) should be("Asia/Tokyo")
+    }
+
+    it("should convert String to DateTimeZone") {
+      fixture.dateTimeZoneConverter.fromSqlType(null) should be(null)
+      fixture.dateTimeZoneConverter.fromSqlType("Asia/Tokyo") should be(DateTimeZone.forID("Asia/Tokyo"))
+    }
+
   }
 
   describe("JodaLocalDateSqlDateConverter") {
