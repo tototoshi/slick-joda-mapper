@@ -31,7 +31,7 @@ package com.github.tototoshi.slick
 import scala.slick.driver.JdbcDriver
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
-import java.sql.{ Time, Timestamp, Date }
+import java.sql._
 import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
 
 class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
@@ -39,14 +39,12 @@ class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
   object TypeMapper extends driver.DriverJdbcType[DateTimeZone]
       with JodaDateTimeZoneSqlStringConverter {
     def sqlType = java.sql.Types.VARCHAR
-    def setValue(v: DateTimeZone, p: PositionedParameters) =
-      p.setString(toSqlType(v))
-    def setOption(v: Option[DateTimeZone], p: PositionedParameters) =
-      p.setStringOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextString())
-    }
-    def updateValue(v: DateTimeZone, r: PositionedResult) = r.updateString(toSqlType(v))
+    override def setValue(v: DateTimeZone, p: PreparedStatement, idx: Int): Unit =
+      p.setString(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): DateTimeZone =
+      fromSqlType(r.getString(idx))
+    override def updateValue(v: DateTimeZone, r: ResultSet, idx: Int): Unit =
+      r.updateString(idx, toSqlType(v))
     override def valueToSQLLiteral(value: DateTimeZone) = toSqlType(value)
   }
 
@@ -68,14 +66,12 @@ class JodaLocalDateMapper(val driver: JdbcDriver) {
       with JodaLocalDateSqlDateConverter {
     def zero = new LocalDate(0L)
     def sqlType = java.sql.Types.DATE
-    def setValue(v: LocalDate, p: PositionedParameters) =
-      p.setDate(toSqlType(v))
-    def setOption(v: Option[LocalDate], p: PositionedParameters) =
-      p.setDateOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextDate())
-    }
-    def updateValue(v: LocalDate, r: PositionedResult) = r.updateDate(toSqlType(v))
+    override def setValue(v: LocalDate, p: PreparedStatement, idx: Int): Unit =
+      p.setDate(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): LocalDate =
+      fromSqlType(r.getDate(idx))
+    override def updateValue(v: LocalDate, r: ResultSet, idx: Int): Unit =
+      r.updateDate(idx, toSqlType(v))
     override def valueToSQLLiteral(value: LocalDate) = "{d '" + toSqlType(value).toString + "'}"
   }
 
@@ -97,14 +93,12 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
       with JodaDateTimeSqlTimestampConverter {
     def zero = new DateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
-    def setValue(v: DateTime, p: PositionedParameters) =
-      p.setTimestamp(toSqlType(v))
-    def setOption(v: Option[DateTime], p: PositionedParameters) =
-      p.setTimestampOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextTimestamp())
-    }
-    def updateValue(v: DateTime, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+    override def setValue(v: DateTime, p: PreparedStatement, idx: Int): Unit =
+      p.setTimestamp(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): DateTime =
+      fromSqlType(r.getTimestamp(idx))
+    override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =
+      r.updateTimestamp(idx, toSqlType(v))
     override def valueToSQLLiteral(value: DateTime) = "{ts '" + toSqlType(value).toString + "'}"
   }
 
@@ -126,14 +120,12 @@ class JodaInstantMapper(val driver: JdbcDriver) {
       with JodaInstantSqlTimestampConverter {
     def zero = new DateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
-    def setValue(v: Instant, p: PositionedParameters) =
-      p.setTimestamp(toSqlType(v))
-    def setOption(v: Option[Instant], p: PositionedParameters) =
-      p.setTimestampOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextTimestamp())
-    }
-    def updateValue(v: Instant, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+    override def setValue(v: Instant, p: PreparedStatement, idx: Int): Unit =
+      p.setTimestamp(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): Instant =
+      fromSqlType(r.getTimestamp(idx))
+    override def updateValue(v: Instant, r: ResultSet, idx: Int): Unit =
+      r.updateTimestamp(idx, toSqlType(v))
     override def valueToSQLLiteral(value: Instant) = "{ts '" + toSqlType(value).toString + "'}"
   }
 
@@ -155,14 +147,12 @@ class JodaLocalDateTimeMapper(val driver: JdbcDriver) {
       with JodaLocalDateTimeSqlTimestampConverter {
     def zero = new LocalDateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
-    def setValue(v: LocalDateTime, p: PositionedParameters) =
-      p.setTimestamp(toSqlType(v))
-    def setOption(v: Option[LocalDateTime], p: PositionedParameters) =
-      p.setTimestampOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextTimestamp())
-    }
-    def updateValue(v: LocalDateTime, r: PositionedResult) = r.updateTimestamp(toSqlType(v))
+    override def setValue(v: LocalDateTime, p: PreparedStatement, idx: Int): Unit =
+      p.setTimestamp(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): LocalDateTime =
+      fromSqlType(r.getTimestamp(idx))
+    override def updateValue(v: LocalDateTime, r: ResultSet, idx: Int): Unit =
+      r.updateTimestamp(idx, toSqlType(v))
     override def valueToSQLLiteral(value: LocalDateTime) = "{ts '" + toSqlType(value).toString + "'}"
   }
 
@@ -184,14 +174,12 @@ class JodaLocalTimeMapper(val driver: JdbcDriver) {
       with JodaLocalTimeSqlTimeConverter {
     def zero = new LocalTime(0L)
     def sqlType = java.sql.Types.TIME
-    def setValue(v: LocalTime, p: PositionedParameters) =
-      p.setTime(toSqlType(v))
-    def setOption(v: Option[LocalTime], p: PositionedParameters) =
-      p.setTimeOption(v.map(toSqlType))
-    def nextValue(r: PositionedResult) = {
-      fromSqlType(r.nextTime())
-    }
-    def updateValue(v: LocalTime, r: PositionedResult) = r.updateTime(toSqlType(v))
+    override def setValue(v: LocalTime, p: PreparedStatement, idx: Int): Unit =
+      p.setTime(idx, toSqlType(v))
+    override def getValue(r: ResultSet, idx: Int): LocalTime =
+      fromSqlType(r.getTime(idx))
+    override def updateValue(v: LocalTime, r: ResultSet, idx: Int): Unit =
+      r.updateTime(idx, toSqlType(v))
     override def valueToSQLLiteral(value: LocalTime) = "{t '" + toSqlType(value).toString + "'}"
   }
 

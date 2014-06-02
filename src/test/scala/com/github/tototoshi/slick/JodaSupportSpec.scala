@@ -155,7 +155,7 @@ abstract class JodaSupportSpec(
     it("should enable us to use joda-time with slick") {
       db withSession { implicit session: Session =>
         insertTestData()
-        val record = (for { j <- jodaTest } yield j).list()
+        val record = (for { j <- jodaTest } yield j).list
         record should have size 3
       }
     }
@@ -189,8 +189,8 @@ abstract class JodaSupportSpec(
         implicit val getResult: GetResult[(DateTimeZone, LocalDate, DateTime, Instant, LocalDateTime, LocalTime)] = GetResult(r => (r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
         implicit val getResult2: GetResult[Jodas] = GetResult(r => Jodas(r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<, r.<<))
 
-        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time FROM joda_test".as[(DateTimeZone, LocalDate, DateTime, Instant, LocalDateTime, LocalTime)].list() should have size 3
-        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time, opt_date_time_zone, opt_local_date, opt_date_time, opt_instant, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list() should have size 3
+        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time FROM joda_test".as[(DateTimeZone, LocalDate, DateTime, Instant, LocalDateTime, LocalTime)].list should have size 3
+        sql"SELECT date_time_zone, local_date, date_time, instant, local_date_time, local_time, opt_date_time_zone, opt_local_date, opt_date_time, opt_instant, opt_local_date_time, opt_local_time FROM joda_test".as[Jodas].list should have size 3
       }
     }
 
