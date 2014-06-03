@@ -7,15 +7,6 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 # Usage
 
-## For Slick 1.x
-
-```scala
-libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.1"
-```
-
-```scala
-import com.github.tototoshi.slick.JodaSupport._
-```
 
 ## For Slick 2.x
 
@@ -33,6 +24,29 @@ Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) cla
 ```scala
 import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.H2JodaSupport._
+```
+
+For Slick 2.1.x, the snapshot version is now available. The build is currently against Slick 2.1.0-M2.
+
+```scala
+resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+
+libraryDependencies ++= Seq(
+    "com.typesafe.slick" %% "slick" % "2.1.0-M2",
+    "joda-time" % "joda-time" % "2.3",
+    "org.joda" % "joda-convert" % "1.5",
+    "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0-SNAPSHOT"
+)
+```
+
+## For Slick 1.x
+
+```scala
+libraryDependencies += "com.github.tototoshi" %% "slick-joda-mapper" % "0.4.1"
+```
+
+```scala
+import com.github.tototoshi.slick.JodaSupport._
 ```
 
 # Example
