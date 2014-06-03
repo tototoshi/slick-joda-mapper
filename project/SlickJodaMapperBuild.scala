@@ -10,14 +10,15 @@ object SlickJodaMapperBuild extends Build {
       name := "slick-joda-mapper",
       organization := "com.github.tototoshi",
       version := "1.1.0",
-      scalaVersion := "2.10.4",
+      crossScalaVersions ++= Seq("2.10.4", "2.11.1"),
+      scalaVersion := "2.11.1",
       scalacOptions ++= Seq("-deprecation", "-language:_"),
       libraryDependencies ++= Seq(
         "joda-time" % "joda-time" % "2.3" % "provided",
         "org.joda" % "joda-convert" % "1.5" % "provided",
         "com.typesafe.slick" %% "slick" % "2.1.0-M2" % "provided",
         "com.h2database" % "h2" % "[1.3,)" % "test",
-        "org.scalatest" %% "scalatest" % "1.9.1" % "test"
+        "org.scalatest" %% "scalatest" % "2.1.7" % "test"
       ),
       initialCommands += """
         import com.github.tototoshi.slick.JodaSupport._

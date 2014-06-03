@@ -3,7 +3,7 @@ package com.github.tototoshi.slick.converter
 import org.joda.time._
 import java.sql.Time
 import org.scalatest.{ BeforeAndAfter, FunSpec }
-import org.scalatest.matchers._
+import org.scalatest._
 import java.util.{ TimeZone, Locale }
 
 class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
@@ -126,4 +126,3 @@ class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAn
   }
 
 }
-

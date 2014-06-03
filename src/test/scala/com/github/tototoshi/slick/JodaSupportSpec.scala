@@ -28,7 +28,7 @@
 package com.github.tototoshi.slick
 
 import org.scalatest.{ BeforeAndAfter, FunSpec }
-import org.scalatest.matchers._
+import org.scalatest._
 import org.joda.time._
 import scala.slick.driver.JdbcDriver
 import scala.slick.jdbc.GetResult
