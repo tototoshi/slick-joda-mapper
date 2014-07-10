@@ -26,13 +26,13 @@ import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.H2JodaSupport._
 ```
 
-For Slick 2.1.x, the snapshot version is now available. The build is currently against Slick 2.1.0-M2.
+For Slick 2.1.x, the snapshot version is now available. The build is currently against Slick 2.1.0-RC1.
 
 ```scala
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
 libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "2.1.0-M2",
+    "com.typesafe.slick" %% "slick" % "2.1.0-RC1",
     "joda-time" % "joda-time" % "2.3",
     "org.joda" % "joda-convert" % "1.5",
     "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0-SNAPSHOT"
@@ -62,4 +62,3 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 ## 1.0.1
  - Added JdbcJodaSupport.
-
