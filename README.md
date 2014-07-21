@@ -14,7 +14,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "2.0.0",
     "joda-time" % "joda-time" % "2.3",
-    "org.joda" % "joda-convert" % "1.5",
+    "org.joda" % "joda-convert" % "1.6",
     "com.github.tototoshi" %% "slick-joda-mapper" % "1.1.0"
 )
 ```
@@ -32,9 +32,9 @@ For Slick 2.1.x, the snapshot version is now available. The build is currently a
 resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
 libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "2.1.0-RC1",
+    "com.typesafe.slick" %% "slick" % "2.1.0-RC2",
     "joda-time" % "joda-time" % "2.3",
-    "org.joda" % "joda-convert" % "1.5",
+    "org.joda" % "joda-convert" % "1.6",
     "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0-SNAPSHOT"
 )
 ```
