@@ -12,10 +12,10 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 ```scala
 libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "2.0.0",
+    "com.typesafe.slick" %% "slick" % "2.1.0",
     "joda-time" % "joda-time" % "2.3",
     "org.joda" % "joda-convert" % "1.6",
-    "com.github.tototoshi" %% "slick-joda-mapper" % "1.1.0"
+    "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0"
 )
 ```
 
@@ -24,19 +24,6 @@ Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) cla
 ```scala
 import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.H2JodaSupport._
-```
-
-For Slick 2.1.x, the snapshot version is now available. The build is currently against Slick 2.1.0-RC3.
-
-```scala
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
-libraryDependencies ++= Seq(
-    "com.typesafe.slick" %% "slick" % "2.1.0-RC3",
-    "joda-time" % "joda-time" % "2.3",
-    "org.joda" % "joda-convert" % "1.6",
-    "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0-SNAPSHOT"
-)
 ```
 
 ## For Slick 1.x
@@ -56,6 +43,9 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 
 # Changelog
+
+## 1.2.0
+ - Support Slick 2.1.0.
 
 ## 1.1.0
  - Added DateTimeZone support.
