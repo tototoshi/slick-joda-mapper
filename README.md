@@ -13,7 +13,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 ```scala
 libraryDependencies ++= Seq(
     "com.typesafe.slick" %% "slick" % "2.1.0",
-    "joda-time" % "joda-time" % "2.3",
+    "joda-time" % "joda-time" % "2.4",
     "org.joda" % "joda-convert" % "1.6",
     "com.github.tototoshi" %% "slick-joda-mapper" % "1.2.0"
 )
