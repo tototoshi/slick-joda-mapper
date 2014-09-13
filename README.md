@@ -20,10 +20,29 @@ libraryDependencies ++= Seq(
 ```
 
 Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) class suitable for the database you use.
+For example, import `H2JodaSupport` if you are using H2Driver.
 
 ```scala
 import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.H2JodaSupport._
+```
+
+Different drivers __can't__ be mixed, You __can't__ do the following.
+
+```scala
+import scala.slick.driver.H2Driver.simple._
+import com.github.tototoshi.slick.JdbcJodaSupport._
+```
+
+Write your own `JdbcSupport` when you want to write db agnostic model class.
+
+```scala
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(yourAbstractDriver)
+
+// with play-slick
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(play.api.db.slick.Config.driver)
+
+import PortableJodaSupport._
 ```
 
 ## For Slick 1.x
