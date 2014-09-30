@@ -56,13 +56,12 @@ import scala.slick.{model => m}
 
 class CustomSourceCodeGenerator(model: m.Model) extends SourceCodeGenerator(model) {
 
-  // add some custom import
+  // add some custom imports
+  // TODO: fix these imports to refer to your JdbcSupport and your Joda imports
   override def code = "import com.github.tototoshi.slick.PostgresJodaSupport._\n" + "import org.joda.time.DateTime\n" + super.code
 
   override def Table = new Table(_) {
     override def Column = new Column(_) {
-
-      override def code = super.code
 
       // munge rawType -> SQL column type HERE (scaladoc in Slick 2.1.0 is outdated or incorrect, GeneratorHelpers#mapJdbcTypeString does not exist)
       // you can filter on model.name for the column name or model.tpe for the column type
