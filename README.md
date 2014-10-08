@@ -53,6 +53,7 @@ This example maps `java.sql.Timestamp` to `org.joda.time.DateTime` using the Pos
 
 ```scala
 import scala.slick.{model => m}
+import scala.slick.codegen.SourceCodeGenerator
 
 class CustomSourceCodeGenerator(model: m.Model) extends SourceCodeGenerator(model) {
 
