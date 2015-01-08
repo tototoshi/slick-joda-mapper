@@ -6,7 +6,7 @@ object SlickJodaMapperBuild extends Build {
   lazy val root = Project(
     id = "slick-datetime-mapper",
     base = file("."),
-    settings = Project.defaultSettings ++ Seq(
+    settings = Defaults.coreDefaultSettings ++ Seq(
       name := "slick-joda-mapper",
       organization := "com.github.tototoshi",
       version := "1.2.0",
