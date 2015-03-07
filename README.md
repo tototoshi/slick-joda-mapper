@@ -9,7 +9,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 ## For Slick 3.0-RC1
 
-```
+```scala
 libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.0.0-RC1",
   "joda-time" % "joda-time" % "2.7",
