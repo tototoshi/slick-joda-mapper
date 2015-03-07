@@ -27,7 +27,7 @@
  */
 package com.github.tototoshi.slick
 
-import scala.slick.driver._
+import slick.driver._
 
 class GenericJodaSupport(val driver: JdbcDriver) {
   protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(driver)

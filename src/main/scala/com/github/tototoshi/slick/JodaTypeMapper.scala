@@ -28,11 +28,11 @@
 
 package com.github.tototoshi.slick
 
-import scala.slick.driver.JdbcDriver
+import slick.driver.JdbcDriver
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
 import java.sql._
-import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
+import slick.jdbc.{ PositionedResult, PositionedParameters }
 
 class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
 
