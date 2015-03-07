@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % "3.0.0-RC1",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
-  "com.github.tototoshi" %% "slick-joda-mapper" % "1.3.0-SNAPSHOT"
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0-SNAPSHOT"
 )
 ```
 
