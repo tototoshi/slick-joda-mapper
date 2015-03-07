@@ -7,6 +7,42 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 # Usage
 
+## For Slick 3.0-RC1
+
+```
+libraryDependencies ++= Seq(
+  "com.typesafe.slick" %% "slick" % "3.0.0-RC1",
+  "joda-time" % "joda-time" % "2.7",
+  "org.joda" % "joda-convert" % "1.7",
+  "com.github.tototoshi" %% "slick-joda-mapper" % "1.3.0-SNAPSHOT"
+)
+```
+
+Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) class suitable for the database you use.
+For example, import `H2JodaSupport` if you are using H2Driver.
+
+```scala
+import scala.slick.driver.H2Driver.api._
+import com.github.tototoshi.slick.H2JodaSupport._
+```
+
+Different drivers __can't__ be mixed, You __can't__ do the following.
+
+```scala
+import scala.slick.driver.H2Driver.api._
+import com.github.tototoshi.slick.JdbcJodaSupport._
+```
+
+Write your own `JdbcSupport` when you want to write db agnostic model class.
+
+```scala
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(yourAbstractDriver)
+
+// with play-slick
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(play.api.db.slick.Config.driver)
+
+import PortableJodaSupport._
+```
 
 ## For Slick 2.x
 
