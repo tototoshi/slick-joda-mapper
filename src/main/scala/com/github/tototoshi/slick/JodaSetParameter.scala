@@ -29,7 +29,7 @@
 package com.github.tototoshi.slick
 
 import com.github.tototoshi.slick.converter.SqlTypeConverter
-import scala.slick.jdbc.{ PositionedParameters, SetParameter }
+import slick.jdbc.{ PositionedParameters, SetParameter }
 
 trait JodaSetParameter[A, B] {
   self: SqlTypeConverter[A, B] =>
