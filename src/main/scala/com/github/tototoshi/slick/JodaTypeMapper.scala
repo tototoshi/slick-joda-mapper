@@ -32,6 +32,7 @@ import scala.slick.driver.JdbcDriver
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
 import java.sql._
+import java.util.Calendar
 import scala.slick.jdbc.{ PositionedResult, PositionedParameters }
 
 class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
@@ -94,7 +95,7 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
     def zero = new DateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
     override def setValue(v: DateTime, p: PreparedStatement, idx: Int): Unit =
-      p.setTimestamp(idx, toSqlType(v))
+      p.setTimestamp(idx, toSqlType(v), Calendar.getInstance(v.getZone().toTimeZone()))
     override def getValue(r: ResultSet, idx: Int): DateTime =
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =
