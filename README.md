@@ -11,7 +11,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.typesafe.slick" %% "slick" % "3.0.0-RC1",
+  "com.typesafe.slick" %% "slick" % "3.0.0-RC2",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
   "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0-SNAPSHOT"
@@ -83,7 +83,7 @@ import PortableJodaSupport._
 
 ### Code generation
 
-Write a custom code generator that replaces `java.sql.Timestamp` with whatever Joda classes you prefer.  
+Write a custom code generator that replaces `java.sql.Timestamp` with whatever Joda classes you prefer.
 
 This example maps `java.sql.Timestamp` to `org.joda.time.DateTime` using the Postgres support.  When you modify it to suit your needs, make sure that the imports refer to the correct `JdbcSupport` class for your database and Joda classes.
 
