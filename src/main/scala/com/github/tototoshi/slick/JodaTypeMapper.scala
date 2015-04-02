@@ -95,7 +95,7 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
     def zero = new DateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
     override def setValue(v: DateTime, p: PreparedStatement, idx: Int): Unit =
-      p.setTimestamp(idx, toSqlType(v), Calendar.getInstance(v.getZone))
+      p.setTimestamp(idx, toSqlType(v), Calendar.getInstance(v.getZone().toTimeZone()))
     override def getValue(r: ResultSet, idx: Int): DateTime =
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =
