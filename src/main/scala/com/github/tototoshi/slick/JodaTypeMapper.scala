@@ -32,6 +32,7 @@ import slick.driver.JdbcDriver
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
 import java.sql._
+import java.util.Calendar
 import slick.jdbc.{ PositionedResult, PositionedParameters }
 
 class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
