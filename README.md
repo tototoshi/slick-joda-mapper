@@ -7,16 +7,14 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 # Usage
 
-## For Slick 3.0-RC1
+## For Slick 3.0
 
 ```scala
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
 libraryDependencies ++= Seq(
-  "com.typesafe.slick" %% "slick" % "3.0.0-RC2",
+  "com.typesafe.slick" %% "slick" % "3.0.0",
   "joda-time" % "joda-time" % "2.7",
   "org.joda" % "joda-convert" % "1.7",
-  "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0-SNAPSHOT"
+  "com.github.tototoshi" %% "slick-joda-mapper" % "2.0.0"
 )
 ```
 
@@ -169,6 +167,9 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 
 # Changelog
+
+## 2.0.0
+ - Support Slick 3.0.0.
 
 ## 1.2.0
  - Support Slick 2.1.0.
