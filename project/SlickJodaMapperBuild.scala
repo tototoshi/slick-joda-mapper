@@ -18,7 +18,7 @@ object SlickJodaMapperBuild extends Build {
         "org.joda" % "joda-convert" % "1.7" % "provided",
         "com.h2database" % "h2" % "[1.4,)" % "test",
         "org.scalatest" %% "scalatest" % "2.2.3" % "test",
-        "com.typesafe.slick" %% "slick" % "3.0.0-RC3" % "provided"
+        "com.typesafe.slick" %% "slick" % "3.0.0" % "provided"
       ),
       initialCommands += """
         import com.github.tototoshi.slick.JodaSupport._
