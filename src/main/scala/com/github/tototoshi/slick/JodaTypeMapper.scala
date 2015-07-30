@@ -100,7 +100,8 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =
       r.updateTimestamp(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: DateTime) = "{ts '" + toSqlString(value) + "'}"
+    override def valueToSQLLiteral(value: DateTime) =
+      "(timestamp with time zone '" + toSqlString(value) + "')"
   }
 
   object JodaGetResult extends JodaGetResult[Timestamp, DateTime] with JodaDateTimeSqlTimestampConverter {
