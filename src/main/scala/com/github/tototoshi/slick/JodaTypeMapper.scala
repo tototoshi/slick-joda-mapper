@@ -73,7 +73,7 @@ class JodaLocalDateMapper(val driver: JdbcDriver) {
       fromSqlType(r.getDate(idx))
     override def updateValue(v: LocalDate, r: ResultSet, idx: Int): Unit =
       r.updateDate(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: LocalDate) = "{d '" + toSqlType(value).toString + "'}"
+    override def valueToSQLLiteral(value: LocalDate) = "{d '" + toSqlString(value) + "'}"
   }
 
   object JodaGetResult extends JodaGetResult[java.sql.Date, LocalDate] with JodaLocalDateSqlDateConverter {
@@ -100,7 +100,7 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =
       r.updateTimestamp(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: DateTime) = "{ts '" + toSqlType(value).toString + "'}"
+    override def valueToSQLLiteral(value: DateTime) = "{ts '" + toSqlString(value) + "'}"
   }
 
   object JodaGetResult extends JodaGetResult[Timestamp, DateTime] with JodaDateTimeSqlTimestampConverter {
@@ -127,7 +127,7 @@ class JodaInstantMapper(val driver: JdbcDriver) {
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: Instant, r: ResultSet, idx: Int): Unit =
       r.updateTimestamp(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: Instant) = "{ts '" + toSqlType(value).toString + "'}"
+    override def valueToSQLLiteral(value: Instant) = "{ts '" + toSqlString(value) + "'}"
   }
 
   object JodaGetResult extends JodaGetResult[Timestamp, Instant] with JodaInstantSqlTimestampConverter {
@@ -154,7 +154,7 @@ class JodaLocalDateTimeMapper(val driver: JdbcDriver) {
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: LocalDateTime, r: ResultSet, idx: Int): Unit =
       r.updateTimestamp(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: LocalDateTime) = "{ts '" + toSqlType(value).toString + "'}"
+    override def valueToSQLLiteral(value: LocalDateTime) = "{ts '" + toSqlString(value) + "')"
   }
 
   object JodaGetResult extends JodaGetResult[Timestamp, LocalDateTime] with JodaLocalDateTimeSqlTimestampConverter {
@@ -181,7 +181,7 @@ class JodaLocalTimeMapper(val driver: JdbcDriver) {
       fromSqlType(r.getTime(idx))
     override def updateValue(v: LocalTime, r: ResultSet, idx: Int): Unit =
       r.updateTime(idx, toSqlType(v))
-    override def valueToSQLLiteral(value: LocalTime) = "{t '" + toSqlType(value).toString + "'}"
+    override def valueToSQLLiteral(value: LocalTime) = "{t '" + toSqlString(value) + "'}"
   }
 
   object JodaGetResult extends JodaGetResult[Time, LocalTime] with JodaLocalTimeSqlTimeConverter {

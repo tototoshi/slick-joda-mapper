@@ -38,6 +38,8 @@ trait ToTypeConverter[A, B] {
 
   def toSqlType(b: B): A
 
+  def toSqlString(b: B): String = toSqlType(b).toString
+
   def millisToSqlType(d: { def getTime(): Long }): java.sql.Date = {
     import java.util.Calendar
     val cal = Calendar.getInstance()
