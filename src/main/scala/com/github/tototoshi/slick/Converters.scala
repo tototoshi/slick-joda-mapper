@@ -34,7 +34,6 @@ import com.github.tototoshi.slick.converter._
 object Converters {
 
   implicit class WrappedDateTimeZone(z: DateTimeZone) extends JodaDateTimeZoneSqlStringConverter {
-    def toSqlString(): String = toSqlType(z)
   }
 
   implicit class WrappedDateTime(d: DateTime) extends JodaDateTimeSqlTimestampConverter {

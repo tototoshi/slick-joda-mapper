@@ -28,6 +28,7 @@
 package com.github.tototoshi.slick.converter
 
 import org.joda.time._
+import org.joda.time.format.DateTimeFormatterBuilder
 import java.sql.{ Timestamp, Time }
 
 trait JodaDateTimeZoneSqlStringConverter
@@ -54,12 +55,32 @@ trait JodaLocalDateSqlDateConverter
 trait JodaDateTimeSqlTimestampConverter
     extends SqlTypeConverter[Timestamp, DateTime] {
 
+  val formatter =
+    new DateTimeFormatterBuilder()
+      .appendYear(4, 4)
+      .appendLiteral('-')
+      .appendMonthOfYear(2)
+      .appendLiteral('-')
+      .appendDayOfMonth(2)
+      .appendLiteral(' ')
+      .appendHourOfDay(2)
+      .appendLiteral(':')
+      .appendMinuteOfHour(2)
+      .appendLiteral(':')
+      .appendSecondOfMinute(2)
+      .appendLiteral('.')
+      .appendMillisOfSecond(3)
+      .appendTimeZoneOffset("Z", true, 2, 2)
+      .toFormatter
+
   def fromSqlType(t: java.sql.Timestamp): DateTime =
     if (t == null) null else new DateTime(t.getTime)
 
   def toSqlType(t: DateTime): java.sql.Timestamp =
     if (t == null) null else new java.sql.Timestamp(t.getMillis)
 
+  override def toSqlString(d: DateTime): String =
+    if (d == null) null else d.toString(formatter)
 }
 
 trait JodaInstantSqlTimestampConverter
