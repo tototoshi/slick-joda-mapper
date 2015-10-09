@@ -222,5 +222,4 @@ abstract class JodaSupportSpec(
 
 import slick.driver._
 
-class JdbcJodaSupportSpec extends JodaSupportSpec(JdbcDriver, JdbcJodaSupport, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
 class H2JodaSupportSpec extends JodaSupportSpec(H2Driver, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
