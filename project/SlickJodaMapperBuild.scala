@@ -4,7 +4,7 @@ import sbt.Keys._
 object SlickJodaMapperBuild extends Build {
 
   lazy val root = Project(
-    id = "slick-datetime-mapper",
+    id = "slick-joda-mapper",
     base = file("."),
     settings = Defaults.coreDefaultSettings ++ Seq(
       name := "slick-joda-mapper",
