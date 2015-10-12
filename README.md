@@ -38,9 +38,6 @@ Write your own `JdbcSupport` when you want to write db agnostic model class.
 ```scala
 object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(yourAbstractDriver)
 
-// with play-slick
-object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(play.api.db.slick.Config.driver)
-
 import PortableJodaSupport._
 ```
 
