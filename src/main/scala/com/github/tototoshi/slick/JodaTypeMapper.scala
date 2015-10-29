@@ -28,14 +28,14 @@
 
 package com.github.tototoshi.slick
 
-import slick.driver.JdbcDriver
+import slick.driver.JdbcProfile
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
 import java.sql._
 import java.util.Calendar
 import slick.jdbc.{ PositionedResult, PositionedParameters }
 
-class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
+class JodaDateTimeZoneMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[DateTimeZone]
       with JodaDateTimeZoneSqlStringConverter {
@@ -61,7 +61,7 @@ class JodaDateTimeZoneMapper(val driver: JdbcDriver) {
 
 }
 
-class JodaLocalDateMapper(val driver: JdbcDriver) {
+class JodaLocalDateMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalDate]
       with JodaLocalDateSqlDateConverter {
@@ -88,7 +88,7 @@ class JodaLocalDateMapper(val driver: JdbcDriver) {
 
 }
 
-class JodaDateTimeMapper(val driver: JdbcDriver) {
+class JodaDateTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[DateTime]
       with JodaDateTimeSqlTimestampConverter {
@@ -115,7 +115,7 @@ class JodaDateTimeMapper(val driver: JdbcDriver) {
 
 }
 
-class JodaInstantMapper(val driver: JdbcDriver) {
+class JodaInstantMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[Instant]
       with JodaInstantSqlTimestampConverter {
@@ -142,7 +142,7 @@ class JodaInstantMapper(val driver: JdbcDriver) {
 
 }
 
-class JodaLocalDateTimeMapper(val driver: JdbcDriver) {
+class JodaLocalDateTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalDateTime]
       with JodaLocalDateTimeSqlTimestampConverter {
@@ -169,7 +169,7 @@ class JodaLocalDateTimeMapper(val driver: JdbcDriver) {
 
 }
 
-class JodaLocalTimeMapper(val driver: JdbcDriver) {
+class JodaLocalTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalTime]
       with JodaLocalTimeSqlTimeConverter {
@@ -195,4 +195,3 @@ class JodaLocalTimeMapper(val driver: JdbcDriver) {
   }
 
 }
-

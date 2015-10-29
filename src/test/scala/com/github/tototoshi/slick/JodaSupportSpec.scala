@@ -31,13 +31,13 @@ import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest._
 import org.joda.time._
 import scala.concurrent.ExecutionContext.Implicits.global
-import slick.driver.JdbcDriver
+import slick.driver.JdbcProfile
 import slick.jdbc.GetResult
 import slick.jdbc.ActionBasedSQLInterpolation._
 import java.util.{ TimeZone, Locale }
 
 abstract class JodaSupportSpec(
-  val driver: JdbcDriver,
+  val driver: JdbcProfile,
   val jodaSupport: GenericJodaSupport,
   val jdbcUrl: String,
   val jdbcDriver: String,
