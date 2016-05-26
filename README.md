@@ -23,12 +23,18 @@ libraryDependencies ++= Seq(
 )
 ```
 
-Import xJodaSupport(H2JodaSupport, PostgresJodaSupport, MySQLJodaSupport...) class suitable for the database you use.
-For example, import `H2JodaSupport` if you are using H2Driver.
+Import the appropriate `xJodaSupport` class suitable for the database you use (`H2JodaSupport`, `PostgresJodaSupport`, `MySQLJodaSupport`, etc.).
+For example, import Slick's `H2Driver` API and `H2JodaSupport` if you are using the H2 database:
 
 ```scala
-import scala.slick.driver.H2Driver.api._
+import slick.driver.H2Driver.api._
 import com.github.tototoshi.slick.H2JodaSupport._
+```
+As another example, if you are using the Postgres database:
+
+```scala
+import slick.driver.PostgresDriver.api._
+import com.github.tototoshi.slick.PostgresJodaSupport._
 ```
 
 Different drivers __can't__ be mixed, You __can't__ do the following.
