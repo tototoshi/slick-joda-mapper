@@ -29,13 +29,19 @@ package com.github.tototoshi.slick
 
 import slick.driver._
 
-class GenericJodaSupport(val driver: JdbcProfile) {
-  protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(driver)
-  protected val localDateMapperDelegate = new JodaLocalDateMapper(driver)
-  protected val dateTimeMapperDelegate = new JodaDateTimeMapper(driver)
-  protected val instantMapperDelegate = new JodaInstantMapper(driver)
-  protected val localDateTimeMapperDelegate = new JodaLocalDateTimeMapper(driver)
-  protected val localTimeMapperDelegate = new JodaLocalTimeMapper(driver)
+class GenericJodaSupport(val driver: JdbcProfile) extends BaseGenericJodaSupport {
+  def profile = driver
+}
+
+trait BaseGenericJodaSupport {
+  def profile: JdbcProfile
+
+  protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(profile)
+  protected val localDateMapperDelegate = new JodaLocalDateMapper(profile)
+  protected val dateTimeMapperDelegate = new JodaDateTimeMapper(profile)
+  protected val instantMapperDelegate = new JodaInstantMapper(profile)
+  protected val localDateTimeMapperDelegate = new JodaLocalDateTimeMapper(profile)
+  protected val localTimeMapperDelegate = new JodaLocalTimeMapper(profile)
 
   implicit val dateTimeZoneTypeMapper = dateTimeZoneMapperDelegate.TypeMapper
   implicit val getDateTimeZoneResult = dateTimeZoneMapperDelegate.JodaGetResult.getResult
@@ -80,3 +86,9 @@ object PostgresJodaSupport extends GenericJodaSupport(PostgresDriver)
 object MySQLJodaSupport extends GenericJodaSupport(MySQLDriver)
 object HsqldbJodaSupport extends GenericJodaSupport(HsqldbDriver)
 object SQLiteJodaSupport extends GenericJodaSupport(SQLiteDriver)
+
+trait H2JodaSupport extends BaseGenericJodaSupport { def profile = H2Driver }
+trait PostgresJodaSupport extends BaseGenericJodaSupport { def profile = PostgresDriver }
+trait MySQLJodaSupport extends BaseGenericJodaSupport { def profile = MySQLDriver }
+trait HsqldbJodaSupport extends BaseGenericJodaSupport { def profile = HsqldbDriver }
+trait SQLiteJodaSupport extends BaseGenericJodaSupport { def profile = SQLiteDriver }
