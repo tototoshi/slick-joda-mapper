@@ -95,9 +95,10 @@ import scala.slick.codegen.SourceCodeGenerator
 
 class CustomSourceCodeGenerator(model: m.Model) extends SourceCodeGenerator(model) {
 
+  override def parentType: Option[String] = Some("com.github.tototoshi.slick.BaseGenericJodaSupport")
   // add some custom imports
-  // TODO: fix these imports to refer to your JdbcSupport and your Joda imports
-  override def code = "import com.github.tototoshi.slick.PostgresJodaSupport._\n" + "import org.joda.time.DateTime\n" + super.code
+  // TODO: fix these imports to refer to your Joda imports
+  override def code = "import org.joda.time.DateTime\n" + super.code
 
   override def Table = new Table(_) {
     override def Column = new Column(_) {
