@@ -6,7 +6,7 @@ import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest._
 import java.util.{ TimeZone, Locale }
 
-class JodaSqlTypeConverterSpec extends FunSpec with ShouldMatchers with BeforeAndAfter {
+class JodaSqlTypeConverterSpec extends FunSpec with Matchers with BeforeAndAfter {
 
   def fixture = new {
     val dateTimeZoneConverter = new JodaDateTimeZoneSqlStringConverter {}

@@ -27,7 +27,7 @@
  */
 package com.github.tototoshi.slick
 
-import slick.driver._
+import slick.jdbc._
 
 class GenericJodaSupport(val driver: JdbcProfile) {
   protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(driver)
@@ -75,8 +75,8 @@ class GenericJodaSupport(val driver: JdbcProfile) {
 
 }
 
-object H2JodaSupport extends GenericJodaSupport(H2Driver)
-object PostgresJodaSupport extends GenericJodaSupport(PostgresDriver)
-object MySQLJodaSupport extends GenericJodaSupport(MySQLDriver)
-object HsqldbJodaSupport extends GenericJodaSupport(HsqldbDriver)
-object SQLiteJodaSupport extends GenericJodaSupport(SQLiteDriver)
+object H2JodaSupport extends GenericJodaSupport(H2Profile)
+object PostgresJodaSupport extends GenericJodaSupport(PostgresProfile)
+object MySQLJodaSupport extends GenericJodaSupport(MySQLProfile)
+object HsqldbJodaSupport extends GenericJodaSupport(HsqldbProfile)
+object SQLiteJodaSupport extends GenericJodaSupport(SQLiteProfile)
