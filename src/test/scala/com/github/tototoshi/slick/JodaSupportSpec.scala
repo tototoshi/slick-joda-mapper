@@ -43,7 +43,7 @@ abstract class JodaSupportSpec(
   val jdbcDriver: String,
   val jdbcUser: String,
   val jdbcPassword: String) extends FunSpec
-    with ShouldMatchers
+    with Matchers
     with BeforeAndAfter {
 
   import driver.api._
