@@ -11,6 +11,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 |Slick version|slick-joda-mapper version|
 |-------------|--------------|
+|3.2.x|2.3.0|
 |3.1.x|2.2.0|
 |3.0.x|2.0.0|
 
