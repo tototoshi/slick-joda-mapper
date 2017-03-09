@@ -31,7 +31,7 @@ import org.scalatest.{ BeforeAndAfter, FunSpec }
 import org.scalatest._
 import org.joda.time._
 import scala.concurrent.ExecutionContext.Implicits.global
-import slick.driver.JdbcProfile
+import slick.jdbc.JdbcProfile
 import slick.jdbc.GetResult
 import slick.jdbc.ActionBasedSQLInterpolation._
 import java.util.{ TimeZone, Locale }
@@ -42,14 +42,16 @@ abstract class JodaSupportSpec(
   val jdbcUrl: String,
   val jdbcDriver: String,
   val jdbcUser: String,
-  val jdbcPassword: String) extends FunSpec
-    with ShouldMatchers
+  val jdbcPassword: String
+) extends FunSpec
+    with Matchers
     with BeforeAndAfter {
 
   import driver.api._
   import jodaSupport._
 
-  case class Jodas(dateTimeZone: DateTimeZone,
+  case class Jodas(
+    dateTimeZone: DateTimeZone,
     localDate: LocalDate,
     dateTime: DateTime,
     instant: Instant,
@@ -60,7 +62,8 @@ abstract class JodaSupportSpec(
     optDateTime: Option[DateTime],
     optInstant: Option[Instant],
     optLocalDateTime: Option[LocalDateTime],
-    optLocalTime: Option[LocalTime])
+    optLocalTime: Option[LocalTime]
+  )
 
   class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
     def dateTimeZone = column[DateTimeZone]("DATE_TIME_ZONE")
@@ -220,6 +223,6 @@ abstract class JodaSupportSpec(
   }
 }
 
-import slick.driver._
+import slick.jdbc._
 
-class H2JodaSupportSpec extends JodaSupportSpec(H2Driver, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
+class H2JodaSupportSpec extends JodaSupportSpec(H2Profile, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
