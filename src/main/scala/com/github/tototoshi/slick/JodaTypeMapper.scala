@@ -28,7 +28,7 @@
 
 package com.github.tototoshi.slick
 
-import slick.driver.JdbcProfile
+import slick.jdbc.JdbcProfile
 import org.joda.time._
 import com.github.tototoshi.slick.converter._
 import java.sql._
