@@ -38,7 +38,7 @@ import java.util.{ TimeZone, Locale }
 
 abstract class JodaSupportSpec(
   val driver: JdbcProfile,
-  val jodaSupport: GenericJodaSupport,
+  val jodaSupport: BaseGenericJodaSupport,
   val jdbcUrl: String,
   val jdbcDriver: String,
   val jdbcUser: String,
@@ -222,4 +222,6 @@ abstract class JodaSupportSpec(
 
 import slick.driver._
 
-class H2JodaSupportSpec extends JodaSupportSpec(H2Driver, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
+class H2JodaSupportObjectSpec extends JodaSupportSpec(H2Driver, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
+
+class H2JodaSupportTraitSpec extends JodaSupportSpec(H2Driver, new H2JodaSupport {}, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
