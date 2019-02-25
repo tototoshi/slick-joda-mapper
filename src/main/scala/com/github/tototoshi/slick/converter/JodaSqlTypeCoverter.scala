@@ -31,7 +31,7 @@ import org.joda.time._
 import java.sql.{ Timestamp, Time }
 
 trait JodaDateTimeZoneSqlStringConverter
-    extends SqlTypeConverter[String, DateTimeZone] {
+  extends SqlTypeConverter[String, DateTimeZone] {
 
   def toSqlType(z: DateTimeZone): String =
     if (z == null) null else z.getID
@@ -41,7 +41,7 @@ trait JodaDateTimeZoneSqlStringConverter
 }
 
 trait JodaLocalDateSqlDateConverter
-    extends SqlTypeConverter[java.sql.Date, LocalDate] {
+  extends SqlTypeConverter[java.sql.Date, LocalDate] {
 
   def toSqlType(d: LocalDate): java.sql.Date =
     if (d == null) null else millisToSqlType(d.toDate)
@@ -52,7 +52,7 @@ trait JodaLocalDateSqlDateConverter
 }
 
 trait JodaDateTimeSqlTimestampConverter
-    extends SqlTypeConverter[Timestamp, DateTime] {
+  extends SqlTypeConverter[Timestamp, DateTime] {
 
   def fromSqlType(t: java.sql.Timestamp): DateTime =
     if (t == null) null else new DateTime(t.getTime)
@@ -63,7 +63,7 @@ trait JodaDateTimeSqlTimestampConverter
 }
 
 trait JodaInstantSqlTimestampConverter
-    extends SqlTypeConverter[Timestamp, Instant] {
+  extends SqlTypeConverter[Timestamp, Instant] {
 
   def fromSqlType(t: java.sql.Timestamp): Instant =
     if (t == null) null else new Instant(t.getTime)
@@ -74,7 +74,7 @@ trait JodaInstantSqlTimestampConverter
 }
 
 trait JodaLocalDateTimeSqlTimestampConverter
-    extends SqlTypeConverter[Timestamp, LocalDateTime] {
+  extends SqlTypeConverter[Timestamp, LocalDateTime] {
 
   def fromSqlType(t: java.sql.Timestamp): LocalDateTime =
     if (t == null) null else new LocalDateTime(t.getTime)
@@ -85,7 +85,7 @@ trait JodaLocalDateTimeSqlTimestampConverter
 }
 
 trait JodaLocalTimeSqlTimeConverter
-    extends SqlTypeConverter[Time, LocalTime] {
+  extends SqlTypeConverter[Time, LocalTime] {
 
   def fromSqlType(t: java.sql.Time): LocalTime =
     if (t == null) null else new LocalTime(t.getTime)

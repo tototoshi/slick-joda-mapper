@@ -37,30 +37,31 @@ import slick.jdbc.ActionBasedSQLInterpolation._
 import java.util.{ Locale, TimeZone }
 
 abstract class JodaSupportSpec(
-  val driver: JdbcProfile,
-  val jodaSupport: GenericJodaSupport,
-  val jdbcUrl: String,
-  val jdbcDriver: String,
-  val jdbcUser: String,
-  val jdbcPassword: String) extends FunSpec
-    with Matchers
-    with BeforeAndAfter {
+    val driver: JdbcProfile,
+    val jodaSupport: GenericJodaSupport,
+    val jdbcUrl: String,
+    val jdbcDriver: String,
+    val jdbcUser: String,
+    val jdbcPassword: String) extends FunSpec
+  with Matchers
+  with BeforeAndAfter {
 
   import driver.api._
   import jodaSupport._
 
-  case class Jodas(dateTimeZone: DateTimeZone,
-    localDate: LocalDate,
-    dateTime: DateTime,
-    instant: Instant,
-    localDateTime: LocalDateTime,
-    localTime: LocalTime,
-    optDateTimeZone: Option[DateTimeZone],
-    optLocalDate: Option[LocalDate],
-    optDateTime: Option[DateTime],
-    optInstant: Option[Instant],
-    optLocalDateTime: Option[LocalDateTime],
-    optLocalTime: Option[LocalTime])
+  case class Jodas(
+      dateTimeZone: DateTimeZone,
+      localDate: LocalDate,
+      dateTime: DateTime,
+      instant: Instant,
+      localDateTime: LocalDateTime,
+      localTime: LocalTime,
+      optDateTimeZone: Option[DateTimeZone],
+      optLocalDate: Option[LocalDate],
+      optDateTime: Option[DateTime],
+      optInstant: Option[Instant],
+      optLocalDateTime: Option[LocalDateTime],
+      optLocalTime: Option[LocalTime])
 
   class JodaTest(tag: Tag) extends Table[Jodas](tag, "JODA_TEST") {
     def dateTimeZone = column[DateTimeZone]("DATE_TIME_ZONE")

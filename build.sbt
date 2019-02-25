@@ -1,10 +1,11 @@
 import sbt._
 import sbt.Keys._
+import scalariform.formatter.preferences._
 
-lazy val root = Project(
-  id = "slick-joda-mapper",
-  base = file("."),
-  settings = Defaults.coreDefaultSettings ++ Seq(
+lazy val `slick-joda-mapper` = project.in(file("."))
+  .settings(scalariformSettings)
+  .settings(publishingSettings)
+  .settings(
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.3.0",
@@ -23,7 +24,13 @@ lazy val root = Project(
       import org.joda.time._
       import java.sql._
     """
-  ) ++ publishingSettings
+  )
+
+lazy val scalariformSettings = Seq(
+  scalariformPreferences := scalariformPreferences.value
+    .setPreference(AlignSingleLineCaseStatements, true)
+    .setPreference(DoubleIndentConstructorArguments, true)
+    .setPreference(DanglingCloseParenthesis, Preserve)
 )
 
 lazy val publishingSettings = Seq(
@@ -44,7 +51,7 @@ lazy val _pomExtra =
     <licenses>
       <license>
         <name>Two-clause BSD-style license</name>
-        <url>http://github.com/tototoshi/slick-joda-mapper/blob/master/LICENSE.txt</url>
+        <url>https://github.com/tototoshi/slick-joda-mapper/blob/master/LICENSE.txt</url>
         <distribution>repo</distribution>
       </license>
     </licenses>
@@ -56,7 +63,6 @@ lazy val _pomExtra =
       <developer>
         <id>tototoshi</id>
         <name>Toshiyuki Takahashi</name>
-        <url>http://tototoshi.github.com</url>
+        <url>https://tototoshi.github.com</url>
       </developer>
     </developers>
-

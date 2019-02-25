@@ -38,7 +38,7 @@ import slick.jdbc.{ PositionedResult, PositionedParameters }
 class JodaDateTimeZoneMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[DateTimeZone]
-      with JodaDateTimeZoneSqlStringConverter {
+    with JodaDateTimeZoneSqlStringConverter {
     def sqlType = java.sql.Types.VARCHAR
     override def setValue(v: DateTimeZone, p: PreparedStatement, idx: Int): Unit =
       p.setString(idx, toSqlType(v))
@@ -64,7 +64,7 @@ class JodaDateTimeZoneMapper(val driver: JdbcProfile) {
 class JodaLocalDateMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalDate]
-      with JodaLocalDateSqlDateConverter {
+    with JodaLocalDateSqlDateConverter {
     def zero = new LocalDate(0L)
     def sqlType = java.sql.Types.DATE
     override def setValue(v: LocalDate, p: PreparedStatement, idx: Int): Unit =
@@ -91,7 +91,7 @@ class JodaLocalDateMapper(val driver: JdbcProfile) {
 class JodaDateTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[DateTime]
-      with JodaDateTimeSqlTimestampConverter {
+    with JodaDateTimeSqlTimestampConverter {
     def zero = new DateTime(0L)
 
     def sqlType = java.sql.Types.TIMESTAMP
@@ -122,7 +122,7 @@ class JodaDateTimeMapper(val driver: JdbcProfile) {
 class JodaInstantMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[Instant]
-      with JodaInstantSqlTimestampConverter {
+    with JodaInstantSqlTimestampConverter {
     def zero = new DateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
     override def sqlTypeName(sym: scala.Option[slick.ast.FieldSymbol]): String =
@@ -152,7 +152,7 @@ class JodaInstantMapper(val driver: JdbcProfile) {
 class JodaLocalDateTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalDateTime]
-      with JodaLocalDateTimeSqlTimestampConverter {
+    with JodaLocalDateTimeSqlTimestampConverter {
     def zero = new LocalDateTime(0L)
     def sqlType = java.sql.Types.TIMESTAMP
     override def sqlTypeName(sym: scala.Option[slick.ast.FieldSymbol]): String =
@@ -182,7 +182,7 @@ class JodaLocalDateTimeMapper(val driver: JdbcProfile) {
 class JodaLocalTimeMapper(val driver: JdbcProfile) {
 
   object TypeMapper extends driver.DriverJdbcType[LocalTime]
-      with JodaLocalTimeSqlTimeConverter {
+    with JodaLocalTimeSqlTimeConverter {
     def zero = new LocalTime(0L)
     def sqlType = java.sql.Types.TIME
     override def setValue(v: LocalTime, p: PreparedStatement, idx: Int): Unit =
