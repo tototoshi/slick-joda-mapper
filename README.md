@@ -10,10 +10,11 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 ## For Slick 3.x
 
 |Slick version|slick-joda-mapper version|
-|-------------|--------------|
-|3.2.x|2.3.0|
-|3.1.x|2.2.0|
-|3.0.x|2.0.0|
+|-------------|-------------------------|
+|        3.3.x|                    2.4.0|
+|        3.2.x|                    2.3.0|
+|        3.1.x|                    2.2.0|
+|        3.0.x|                    2.0.0|
 
 ```scala
 libraryDependencies ++= Seq(
@@ -176,6 +177,12 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 
 # Changelog
+
+## 2.4.0
+ - Suppoer Slick 3.3.0
+
+## 2.3.0
+ - Suppoer Slick 3.2.0
 
 ## 2.2.0
  - Use JdbcProfile since JdbcDriver is deprecated.
