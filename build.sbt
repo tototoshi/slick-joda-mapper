@@ -14,7 +14,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     scalacOptions ++= Seq("-deprecation", "-language:_"),
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.10.1" % "provided",
-      "org.joda" % "joda-convert" % "2.2.0" % "provided",
+      "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "[1.4,)" % "test",
       "org.scalatest" %% "scalatest" % "3.0.7" % "test",
       "com.typesafe.slick" %% "slick" % "3.3.0" % "provided"
