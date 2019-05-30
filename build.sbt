@@ -9,15 +9,15 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.4.0",
-    crossScalaVersions ++= Seq("2.11.12", "2.12.8"),
+    crossScalaVersions ++= Seq("2.11.12", "2.12.8", "2.13.0-RC2"),
     scalaVersion := "2.12.8",
     scalacOptions ++= Seq("-deprecation", "-language:_"),
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.10.2" % "provided",
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "[1.4,)" % "test",
-      "org.scalatest" %% "scalatest" % "3.0.7" % "test",
-      "com.typesafe.slick" %% "slick" % "3.3.0" % "provided"
+      "org.scalatest" %% "scalatest" % "3.0.8-RC4" % "test",
+      "com.typesafe.slick" %% "slick" % "3.3.1" % "provided"
     ),
     initialCommands += """
       import com.github.tototoshi.slick.JodaSupport._
