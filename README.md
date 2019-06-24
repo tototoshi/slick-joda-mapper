@@ -179,14 +179,14 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 # Changelog
 
 ## 2.4.1
- - Suppoer Scala 2.13.0
- - Suppoer Slick 3.3.1
+ - Support Scala 2.13.0
+ - Support Slick 3.3.1
 
 ## 2.4.0
- - Suppoer Slick 3.3.0
+ - Support Slick 3.3.0
 
 ## 2.3.0
- - Suppoer Slick 3.2.0
+ - Support Slick 3.2.0
 
 ## 2.2.0
  - Use JdbcProfile since JdbcDriver is deprecated.
