@@ -178,6 +178,9 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 # Changelog
 
+## 2.4.2
+ - Update joda-time to 2.10.3
+
 ## 2.4.1
  - Support Scala 2.13.0
  - Support Slick 3.3.1
