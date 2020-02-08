@@ -2,11 +2,13 @@ package com.github.tototoshi.slick.converter
 
 import org.joda.time._
 import java.sql.Time
-import org.scalatest.{ BeforeAndAfter, FunSpec }
+import org.scalatest.BeforeAndAfter
 import org.scalatest._
 import java.util.{ TimeZone, Locale }
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
-class JodaSqlTypeConverterSpec extends FunSpec with Matchers with BeforeAndAfter {
+class JodaSqlTypeConverterSpec extends AnyFunSpec with Matchers with BeforeAndAfter {
 
   def fixture = new {
     val dateTimeZoneConverter = new JodaDateTimeZoneSqlStringConverter {}

@@ -27,7 +27,7 @@
  */
 package com.github.tototoshi.slick
 
-import org.scalatest.{ BeforeAndAfter, FunSpec }
+import org.scalatest.BeforeAndAfter
 import org.scalatest._
 import org.joda.time._
 
@@ -35,6 +35,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import slick.jdbc.{ GetResult, H2Profile, JdbcProfile }
 import slick.jdbc.ActionBasedSQLInterpolation._
 import java.util.{ Locale, TimeZone }
+import org.scalatest.funspec.AnyFunSpec
+import org.scalatest.matchers.should.Matchers
 
 abstract class JodaSupportSpec(
     val driver: JdbcProfile,
@@ -42,7 +44,7 @@ abstract class JodaSupportSpec(
     val jdbcUrl: String,
     val jdbcDriver: String,
     val jdbcUser: String,
-    val jdbcPassword: String) extends FunSpec
+    val jdbcPassword: String) extends AnyFunSpec
   with Matchers
   with BeforeAndAfter {
 

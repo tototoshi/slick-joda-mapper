@@ -39,13 +39,13 @@ trait JodaSetParameter[A, B] {
   def setOption(rs: PositionedParameters, d: Option[A]): Unit
 
   object setJodaParameter extends SetParameter[B] {
-    def apply(d: B, p: PositionedParameters) {
+    def apply(d: B, p: PositionedParameters): Unit = {
       set(p, toSqlType(d))
     }
   }
 
   object setJodaOptionParameter extends SetParameter[Option[B]] {
-    def apply(d: Option[B], p: PositionedParameters) {
+    def apply(d: Option[B], p: PositionedParameters): Unit = {
       setOption(p, d.map(toSqlType))
     }
   }
