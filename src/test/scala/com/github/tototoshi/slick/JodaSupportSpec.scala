@@ -28,25 +28,26 @@
 package com.github.tototoshi.slick
 
 import org.scalatest.BeforeAndAfter
-import org.scalatest._
 import org.joda.time._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import slick.jdbc.{ GetResult, H2Profile, JdbcProfile }
-import slick.jdbc.ActionBasedSQLInterpolation._
+import slick.jdbc.{ GetResult, H2Profile, JdbcProfile, MySQLProfile, PostgresProfile }
 import java.util.{ Locale, TimeZone }
+
+import com.dimafeng.testcontainers.{ Container, ForEachTestContainer, JdbcDatabaseContainer, MySQLContainer, PostgreSQLContainer }
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
-abstract class JodaSupportSpec(
-    val driver: JdbcProfile,
-    val jodaSupport: GenericJodaSupport,
-    val jdbcUrl: String,
-    val jdbcDriver: String,
-    val jdbcUser: String,
-    val jdbcPassword: String) extends AnyFunSpec
+abstract class JodaSupportSpec extends AnyFunSpec
   with Matchers
   with BeforeAndAfter {
+
+  val driver: JdbcProfile
+  val jodaSupport: GenericJodaSupport
+  def jdbcUrl: String
+  def jdbcDriver: String
+  def jdbcUser: String
+  def jdbcPassword: String
 
   import driver.api._
   import jodaSupport._
@@ -81,7 +82,7 @@ abstract class JodaSupportSpec(
     def * = (dateTimeZone, localDate, dateTime, instant, localDateTime, localTime, optDateTimeZone, optLocalDate, optDateTime, optInstant, optLocalDateTime, optLocalTime) <> (Jodas.tupled, Jodas.unapply _)
   }
 
-  val db = Database.forURL(url = jdbcUrl, user = jdbcUser, password = jdbcPassword, driver = jdbcDriver)
+  lazy val db = Database.forURL(url = jdbcUrl, user = jdbcUser, password = jdbcPassword, driver = jdbcDriver)
 
   val jodaTest = TableQuery[JodaTest]
 
@@ -223,4 +224,32 @@ abstract class JodaSupportSpec(
   }
 }
 
-class H2JodaSupportSpec extends JodaSupportSpec(H2Profile, H2JodaSupport, "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1", "org.h2.Driver", "sa", null)
+class H2JodaSupportSpec extends JodaSupportSpec {
+  override val driver = H2Profile
+  override val jodaSupport = H2JodaSupport
+  override def jdbcUrl = "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1"
+  override def jdbcDriver = "org.h2.Driver"
+  override def jdbcUser = "sa"
+  override def jdbcPassword = null
+}
+
+abstract class TestContainerSpec extends JodaSupportSpec with ForEachTestContainer {
+  override def container: JdbcDatabaseContainer with Container
+  override def jdbcUrl = container.jdbcUrl
+  override def jdbcUser = container.username
+  override def jdbcPassword = container.password
+}
+
+class MySQLJodaSupportSpec extends TestContainerSpec {
+  override val container = MySQLContainer()
+  override def jdbcDriver = "com.mysql.jdbc.Driver"
+  override val driver = MySQLProfile
+  override val jodaSupport = MySQLJodaSupport
+}
+
+class PostgresJodaSupportSpec extends TestContainerSpec {
+  override val container = PostgreSQLContainer()
+  override def jdbcDriver = "org.postgresql.Driver"
+  override val driver = PostgresProfile
+  override val jodaSupport = PostgresJodaSupport
+}
