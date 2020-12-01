@@ -27,51 +27,52 @@
  */
 package com.github.tototoshi.slick
 
+import org.joda.time.{ DateTime, DateTimeZone, Instant, LocalDate, LocalDateTime, LocalTime }
 import slick.jdbc._
 
 class GenericJodaSupport(val driver: JdbcProfile) {
-  protected val dateTimeZoneMapperDelegate = new JodaDateTimeZoneMapper(driver)
-  protected val localDateMapperDelegate = new JodaLocalDateMapper(driver)
-  protected val dateTimeMapperDelegate = new JodaDateTimeMapper(driver)
-  protected val instantMapperDelegate = new JodaInstantMapper(driver)
-  protected val localDateTimeMapperDelegate = new JodaLocalDateTimeMapper(driver)
-  protected val localTimeMapperDelegate = new JodaLocalTimeMapper(driver)
+  protected val dateTimeZoneMapperDelegate: JodaDateTimeZoneMapper = new JodaDateTimeZoneMapper(driver)
+  protected val localDateMapperDelegate: JodaLocalDateMapper = new JodaLocalDateMapper(driver)
+  protected val dateTimeMapperDelegate: JodaDateTimeMapper = new JodaDateTimeMapper(driver)
+  protected val instantMapperDelegate: JodaInstantMapper = new JodaInstantMapper(driver)
+  protected val localDateTimeMapperDelegate: JodaLocalDateTimeMapper = new JodaLocalDateTimeMapper(driver)
+  protected val localTimeMapperDelegate: JodaLocalTimeMapper = new JodaLocalTimeMapper(driver)
 
-  implicit val dateTimeZoneTypeMapper = dateTimeZoneMapperDelegate.TypeMapper
-  implicit val getDateTimeZoneResult = dateTimeZoneMapperDelegate.JodaGetResult.getResult
-  implicit val getDateTimeZoneOptionResult = dateTimeZoneMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setDateTimeZoneParameter = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setDateTimeZoneOptionParameter = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val dateTimeZoneTypeMapper: JdbcProfile#DriverJdbcType[DateTimeZone] = dateTimeZoneMapperDelegate.TypeMapper
+  implicit val getDateTimeZoneResult: GetResult[DateTimeZone] = dateTimeZoneMapperDelegate.JodaGetResult.getResult
+  implicit val getDateTimeZoneOptionResult: GetResult[Option[DateTimeZone]] = dateTimeZoneMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setDateTimeZoneParameter: SetParameter[DateTimeZone] = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setDateTimeZoneOptionParameter: SetParameter[Option[DateTimeZone]] = dateTimeZoneMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
-  implicit val localDateTypeMapper = localDateMapperDelegate.TypeMapper
-  implicit val getLocalDateResult = localDateMapperDelegate.JodaGetResult.getResult
-  implicit val getLocalDateOptionResult = localDateMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setLocalDateParameter = localDateMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setLocalDateOptionParameter = localDateMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val localDateTypeMapper: JdbcProfile#DriverJdbcType[LocalDate] = localDateMapperDelegate.TypeMapper
+  implicit val getLocalDateResult: GetResult[LocalDate] = localDateMapperDelegate.JodaGetResult.getResult
+  implicit val getLocalDateOptionResult: GetResult[Option[LocalDate]] = localDateMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setLocalDateParameter: SetParameter[LocalDate] = localDateMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setLocalDateOptionParameter: SetParameter[Option[LocalDate]] = localDateMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
-  implicit val datetimeTypeMapper = dateTimeMapperDelegate.TypeMapper
-  implicit val getDatetimeResult = dateTimeMapperDelegate.JodaGetResult.getResult
-  implicit val getDatetimeOptionResult = dateTimeMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setDatetimeParameter = dateTimeMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setDatetimeOptionParameter = dateTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val datetimeTypeMapper: JdbcProfile#DriverJdbcType[DateTime] = dateTimeMapperDelegate.TypeMapper
+  implicit val getDatetimeResult: GetResult[DateTime] = dateTimeMapperDelegate.JodaGetResult.getResult
+  implicit val getDatetimeOptionResult: GetResult[Option[DateTime]] = dateTimeMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setDatetimeParameter: SetParameter[DateTime] = dateTimeMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setDatetimeOptionParameter: SetParameter[Option[DateTime]] = dateTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
-  implicit val instantTypeMapper = instantMapperDelegate.TypeMapper
-  implicit val getInstantResult = instantMapperDelegate.JodaGetResult.getResult
-  implicit val getInstantOptionResult = instantMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setInstantParameter = instantMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setInstantOptionParameter = instantMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val instantTypeMapper: JdbcProfile#DriverJdbcType[Instant] = instantMapperDelegate.TypeMapper
+  implicit val getInstantResult: GetResult[Instant] = instantMapperDelegate.JodaGetResult.getResult
+  implicit val getInstantOptionResult: GetResult[Option[Instant]] = instantMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setInstantParameter: SetParameter[Instant] = instantMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setInstantOptionParameter: SetParameter[Option[Instant]] = instantMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
-  implicit val localDatetimeTypeMapper = localDateTimeMapperDelegate.TypeMapper
-  implicit val getLocalDatetimeResult = localDateTimeMapperDelegate.JodaGetResult.getResult
-  implicit val getLocalDatetimeOptionResult = localDateTimeMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setLocalDatetimeParameter = localDateTimeMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setLocalDatetimeOptionParameter = localDateTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val localDatetimeTypeMapper: JdbcProfile#DriverJdbcType[LocalDateTime] = localDateTimeMapperDelegate.TypeMapper
+  implicit val getLocalDatetimeResult: GetResult[LocalDateTime] = localDateTimeMapperDelegate.JodaGetResult.getResult
+  implicit val getLocalDatetimeOptionResult: GetResult[Option[LocalDateTime]] = localDateTimeMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setLocalDatetimeParameter: SetParameter[LocalDateTime] = localDateTimeMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setLocalDatetimeOptionParameter: SetParameter[Option[LocalDateTime]] = localDateTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
-  implicit val localTimeTypeMapper = localTimeMapperDelegate.TypeMapper
-  implicit val getLocalTimeResult = localTimeMapperDelegate.JodaGetResult.getResult
-  implicit val getLocalTimeOptionResult = localTimeMapperDelegate.JodaGetResult.getOptionResult
-  implicit val setLocalTimeParameter = localTimeMapperDelegate.JodaSetParameter.setJodaParameter
-  implicit val setLocalTimeOptionParameter = localTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
+  implicit val localTimeTypeMapper: JdbcProfile#DriverJdbcType[LocalTime] = localTimeMapperDelegate.TypeMapper
+  implicit val getLocalTimeResult: GetResult[LocalTime] = localTimeMapperDelegate.JodaGetResult.getResult
+  implicit val getLocalTimeOptionResult: GetResult[Option[LocalTime]] = localTimeMapperDelegate.JodaGetResult.getOptionResult
+  implicit val setLocalTimeParameter: SetParameter[LocalTime] = localTimeMapperDelegate.JodaSetParameter.setJodaParameter
+  implicit val setLocalTimeOptionParameter: SetParameter[Option[LocalTime]] = localTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
 }
 
