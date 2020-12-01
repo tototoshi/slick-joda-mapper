@@ -27,7 +27,6 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "com.typesafe.slick" %% "slick" % "3.3.2" % "provided"
     ),
     initialCommands += """
-      import com.github.tototoshi.slick.JodaSupport._
       import org.joda.time._
       import java.sql._
     """
