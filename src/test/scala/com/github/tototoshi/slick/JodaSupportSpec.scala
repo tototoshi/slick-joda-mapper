@@ -36,6 +36,7 @@ import slick.jdbc.{ GetResult, H2Profile, JdbcProfile, MySQLProfile, PostgresPro
 import java.util.{ Locale, TimeZone }
 
 import com.dimafeng.testcontainers.{ Container, ForAllTestContainer, JdbcDatabaseContainer, MySQLContainer, PostgreSQLContainer }
+import org.testcontainers.utility.DockerImageName
 import org.scalatest.funspec.AnyFunSpec
 import org.scalatest.matchers.should.Matchers
 
@@ -244,7 +245,7 @@ abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContaine
 class MySQLJodaSupportSpec extends TestContainerSpec {
   // TODO update 5.7 or later
   // `.schema.create` does not work due to timestamp default value issue
-  override val container = MySQLContainer(mysqlImageVersion = "mysql:5.6.50")
+  override val container = MySQLContainer(mysqlImageVersion = DockerImageName.parse("mysql:5.6.50"))
   override def jdbcDriver = "com.mysql.jdbc.Driver"
   override val driver = MySQLProfile
   override val jodaSupport = MySQLJodaSupport
