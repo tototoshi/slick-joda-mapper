@@ -176,6 +176,13 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 # Changelog
 
+## 2.5.0
+
+ - Update dependencies
+ - Migrate from travis-ci to GitHub Actions
+ - Add explicit type annotations to implicit val
+ - etc
+
 ## 2.4.2
  - Update joda-time to 2.10.3
 
