@@ -27,6 +27,8 @@
  */
 package com.github.tototoshi.slick.converter
 
+import scala.language.reflectiveCalls
+
 trait SqlTypeConverter[A, B] extends FromTypeConverter[A, B]
   with ToTypeConverter[A, B]
 
