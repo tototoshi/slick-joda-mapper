@@ -1,5 +1,7 @@
 # slick-joda-mapper
 
+![CI](https://github.com/tototoshi/slick-joda-mapper/workflows/CI/badge.svg)
+
 Enables you to use joda-time with Slick.
 You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`, `DateTimeZone` with Slick.
 
