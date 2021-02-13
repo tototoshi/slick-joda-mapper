@@ -4,6 +4,7 @@ on:
   push:
   schedule:
   - cron: '0 0 * * 3'
+  workflow_dispatch:
 jobs:
   test:
     runs-on: ubuntu-latest
