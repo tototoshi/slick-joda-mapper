@@ -31,7 +31,7 @@ jobs:
             sbt -v "+test"
             ;;
           3)
-            sbt -v '++ 3.0.0-RC1!' compile
+            sbt -v '++ 3.0.0-RC2!' compile
             ;;
           *)
             echo "unknown scala version"
