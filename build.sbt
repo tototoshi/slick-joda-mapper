@@ -35,7 +35,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "1.4.200" % "test",
       "com.dimafeng" %% "testcontainers-scala" % "0.39.3" % "test" withDottyCompat scalaVersion.value,
-      "mysql" % "mysql-connector-java" % "8.0.23" % "test",
+      "mysql" % "mysql-connector-java" % "8.0.24" % "test",
       "org.postgresql" % "postgresql" % "42.2.19" % "test",
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
