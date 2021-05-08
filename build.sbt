@@ -59,7 +59,7 @@ lazy val scalariformSettings = Seq(
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
   publishTo := _publishTo(version.value),
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomExtra := _pomExtra
 )
 
