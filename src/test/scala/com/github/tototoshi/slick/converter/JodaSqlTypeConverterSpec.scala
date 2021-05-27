@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 
 class JodaSqlTypeConverterSpec extends AnyFunSpec with Matchers with BeforeAndAfter {
 
-  def fixture = new {
+  private object fixture {
     val dateTimeZoneConverter = new JodaDateTimeZoneSqlStringConverter {}
     val localDateConverter = new JodaLocalDateSqlDateConverter {}
     val dateTimeConverter = new JodaDateTimeSqlTimestampConverter {}

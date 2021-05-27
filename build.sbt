@@ -11,7 +11,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.5.0",
-    crossScalaVersions ++= Seq("2.11.12", "2.12.13", "2.13.6"),
+    crossScalaVersions ++= Seq("2.11.12", "2.12.13", "2.13.6", "3.0.0"),
     scalaVersion := "2.13.6",
     scalacOptions ++= Seq(
       "-deprecation",
@@ -30,11 +30,21 @@ lazy val `slick-joda-mapper` = project.in(file("."))
           Nil
       }
     },
+    Test / sources := {
+      if (scalaBinaryVersion.value == "3") {
+        val exclude = Set(
+          "JodaSupportSpec.scala" // TODO slick macro
+        )
+        (Test / sources).value.filterNot(x => exclude(x.getName))
+      } else {
+        (Test / sources).value
+      }
+    },
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.10.10" % "provided",
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "1.4.200" % "test",
-      "com.dimafeng" %% "testcontainers-scala" % "0.39.5" % "test" cross CrossVersion.for3Use2_13,
+      "com.dimafeng" %% "testcontainers-scala" % "0.39.5" % "test",
       "mysql" % "mysql-connector-java" % "8.0.25" % "test",
       "org.postgresql" % "postgresql" % "42.2.20" % "test",
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
