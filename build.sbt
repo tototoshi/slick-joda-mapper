@@ -34,14 +34,14 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "joda-time" % "joda-time" % "2.10.10" % "provided",
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "1.4.200" % "test",
-      "com.dimafeng" %% "testcontainers-scala" % "0.39.5" % "test" withDottyCompat scalaVersion.value,
+      "com.dimafeng" %% "testcontainers-scala" % "0.39.5" % "test" cross CrossVersion.for3Use2_13,
       "mysql" % "mysql-connector-java" % "8.0.25" % "test",
       "org.postgresql" % "postgresql" % "42.2.20" % "test",
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "1.7.30" % "test",
       "org.scalatest" %% "scalatest" % "3.2.9" % "test",
-      "com.typesafe.slick" %% "slick" % "3.3.3" % "provided" withDottyCompat scalaVersion.value
+      "com.typesafe.slick" %% "slick" % "3.3.3" % "provided" cross CrossVersion.for3Use2_13
     ),
     initialCommands += """
       import org.joda.time._
