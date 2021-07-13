@@ -87,7 +87,7 @@ class JodaLocalDateMapper(val driver: JdbcProfile) {
 
 }
 
-class JodaDateTimeMapper(val driver: JdbcProfile) {
+class JodaDateTimeMapper(val driver: JdbcProfile, setTimeZone: DateTime => Option[Calendar]) {
 
   object TypeMapper extends driver.DriverJdbcType[DateTime]
     with JodaDateTimeSqlTimestampConverter {
@@ -95,8 +95,14 @@ class JodaDateTimeMapper(val driver: JdbcProfile) {
     def sqlType = java.sql.Types.TIMESTAMP
     override def sqlTypeName(sym: scala.Option[slick.ast.FieldSymbol]): String =
       driver.columnTypes.timestampJdbcType.sqlTypeName(sym)
-    override def setValue(v: DateTime, p: PreparedStatement, idx: Int): Unit =
-      p.setTimestamp(idx, toSqlType(v), Calendar.getInstance(v.getZone().toTimeZone()))
+    override def setValue(v: DateTime, p: PreparedStatement, idx: Int): Unit = {
+      setTimeZone(v) match {
+        case Some(calendar) =>
+          p.setTimestamp(idx, toSqlType(v), calendar)
+        case None =>
+          p.setTimestamp(idx, toSqlType(v))
+      }
+    }
     override def getValue(r: ResultSet, idx: Int): DateTime =
       fromSqlType(r.getTimestamp(idx))
     override def updateValue(v: DateTime, r: ResultSet, idx: Int): Unit =

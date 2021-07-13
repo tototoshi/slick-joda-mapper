@@ -28,12 +28,22 @@
 package com.github.tototoshi.slick
 
 import org.joda.time.{ DateTime, DateTimeZone, Instant, LocalDate, LocalDateTime, LocalTime }
+import java.util.Calendar
+import org.joda.time.DateTime
 import slick.jdbc._
 
-class GenericJodaSupport(val driver: JdbcProfile) {
+/**
+ * @param setTimeZone `Calendar` parameter for [[https://docs.oracle.com/javase/8/docs/api/java/sql/PreparedStatement.html#setTimestamp-int-java.sql.Timestamp-java.util.Calendar-]]
+ */
+class GenericJodaSupport(val driver: JdbcProfile, setTimeZone: DateTime => Option[Calendar]) {
+
+  def this(driver: JdbcProfile) = {
+    this(driver, GenericJodaSupport.defaultSetTimeZoneFunction)
+  }
+
   protected val dateTimeZoneMapperDelegate: JodaDateTimeZoneMapper = new JodaDateTimeZoneMapper(driver)
   protected val localDateMapperDelegate: JodaLocalDateMapper = new JodaLocalDateMapper(driver)
-  protected val dateTimeMapperDelegate: JodaDateTimeMapper = new JodaDateTimeMapper(driver)
+  protected val dateTimeMapperDelegate: JodaDateTimeMapper = new JodaDateTimeMapper(driver, setTimeZone)
   protected val instantMapperDelegate: JodaInstantMapper = new JodaInstantMapper(driver)
   protected val localDateTimeMapperDelegate: JodaLocalDateTimeMapper = new JodaLocalDateTimeMapper(driver)
   protected val localTimeMapperDelegate: JodaLocalTimeMapper = new JodaLocalTimeMapper(driver)
@@ -74,6 +84,11 @@ class GenericJodaSupport(val driver: JdbcProfile) {
   implicit val setLocalTimeParameter: SetParameter[LocalTime] = localTimeMapperDelegate.JodaSetParameter.setJodaParameter
   implicit val setLocalTimeOptionParameter: SetParameter[Option[LocalTime]] = localTimeMapperDelegate.JodaSetParameter.setJodaOptionParameter
 
+}
+
+object GenericJodaSupport {
+  val defaultSetTimeZoneFunction: DateTime => Option[Calendar] = datetime =>
+    Some(Calendar.getInstance(datetime.getZone.toTimeZone))
 }
 
 object H2JodaSupport extends GenericJodaSupport(H2Profile)
