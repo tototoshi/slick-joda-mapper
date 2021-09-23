@@ -41,7 +41,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       }
     },
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.10.10" % "provided",
+      "joda-time" % "joda-time" % "2.10.11" % "provided",
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "1.4.200" % "test",
       "com.dimafeng" %% "testcontainers-scala" % "0.39.7" % "test",
