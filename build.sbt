@@ -11,8 +11,8 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.5.0",
-    crossScalaVersions ++= Seq("2.11.12", "2.12.15", "2.13.6", "3.1.0"),
-    scalaVersion := "2.13.6",
+    crossScalaVersions ++= Seq("2.11.12", "2.12.15", "2.13.7", "3.0.2"),
+    scalaVersion := "2.13.7",
     scalacOptions ++= Seq(
       "-deprecation",
       "-feature",
@@ -41,12 +41,12 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       }
     },
     libraryDependencies ++= Seq(
-      "joda-time" % "joda-time" % "2.10.12" % "provided",
+      "joda-time" % "joda-time" % "2.10.13" % "provided",
       "org.joda" % "joda-convert" % "2.2.1" % "provided",
       "com.h2database" % "h2" % "1.4.200" % "test",
-      "com.dimafeng" %% "testcontainers-scala" % "0.39.8" % "test",
-      "mysql" % "mysql-connector-java" % "8.0.26" % "test",
-      "org.postgresql" % "postgresql" % "42.2.24" % "test",
+      "com.dimafeng" %% "testcontainers-scala" % "0.39.10" % "test",
+      "mysql" % "mysql-connector-java" % "8.0.27" % "test",
+      "org.postgresql" % "postgresql" % "42.3.1" % "test",
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "1.7.32" % "test",
