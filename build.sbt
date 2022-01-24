@@ -50,7 +50,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "1.7.33" % "test",
-      "org.scalatest" %% "scalatest" % "3.2.10" % "test",
+      "org.scalatest" %% "scalatest" % "3.2.11" % "test",
       "com.typesafe.slick" %% "slick" % "3.3.3" % "provided" cross CrossVersion.for3Use2_13
     ),
     initialCommands += """
