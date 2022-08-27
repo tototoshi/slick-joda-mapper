@@ -9,12 +9,12 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 ## For Slick 3.x
 
-|Slick version|slick-joda-mapper version|
-|-------------|-------------------------|
-|        3.3.x|                    2.4.2|
-|        3.2.x|                    2.3.0|
-|        3.1.x|                    2.2.0|
-|        3.0.x|                    2.0.0|
+| Slick version | slick-joda-mapper version |
+| ------------- | ------------------------- |
+| 3.3.x         | 2.4.2                     |
+| 3.2.x         | 2.3.0                     |
+| 3.1.x         | 2.2.0                     |
+| 3.0.x         | 2.0.0                     |
 
 ```scala
 libraryDependencies ++= Seq(
@@ -32,6 +32,7 @@ For example, import Slick's `H2Driver` API and `H2JodaSupport` if you are using 
 import slick.driver.H2Driver.api._
 import com.github.tototoshi.slick.H2JodaSupport._
 ```
+
 As another example, if you are using the Postgres database:
 
 ```scala
@@ -39,7 +40,7 @@ import slick.driver.PostgresDriver.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 ```
 
-Different drivers __can't__ be mixed, You __can't__ do the following.
+Different drivers **can't** be mixed, You **can't** do the following.
 
 ```scala
 import scala.slick.driver.H2Driver.api._
@@ -73,7 +74,7 @@ import scala.slick.driver.H2Driver.simple._
 import com.github.tototoshi.slick.H2JodaSupport._
 ```
 
-Different drivers __can't__ be mixed, You __can't__ do the following.
+Different drivers **can't** be mixed, You **can't** do the following.
 
 ```scala
 import scala.slick.driver.H2Driver.simple._
@@ -95,7 +96,7 @@ import PortableJodaSupport._
 
 Write a custom code generator that replaces `java.sql.Timestamp` with whatever Joda classes you prefer.
 
-This example maps `java.sql.Timestamp` to `org.joda.time.DateTime` using the Postgres support.  When you modify it to suit your needs, make sure that the imports refer to the correct `JdbcSupport` class for your database and Joda classes.
+This example maps `java.sql.Timestamp` to `org.joda.time.DateTime` using the Postgres support. When you modify it to suit your needs, make sure that the imports refer to the correct `JdbcSupport` class for your database and Joda classes.
 
 ```scala
 import scala.slick.{model => m}
@@ -124,6 +125,7 @@ class CustomSourceCodeGenerator(model: m.Model) extends SourceCodeGenerator(mode
   }
 }
 ```
+
 Then write a simple app harness to run code generation:
 
 ```scala
@@ -158,7 +160,7 @@ object CodeGen extends App {
 
 ```
 
-You can run and keep adjusting your source code generation using `sbt run`.  If you get compile errors on the generated `Tables.scala`, just delete it and try again.
+You can run and keep adjusting your source code generation using `sbt run`. If you get compile errors on the generated `Tables.scala`, just delete it and try again.
 
 ## For Slick 1.x
 
@@ -172,46 +174,59 @@ import com.github.tototoshi.slick.JodaSupport._
 
 # Example
 
-
 https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/github/tototoshi/slick/JodaSupportSpec.scala
-
 
 # Changelog
 
+## 2.6.0
+
+- Update dependencies
+- Add Scala 3 to cross build
+
 ## 2.5.0
 
- - Update dependencies
- - Migrate from travis-ci to GitHub Actions
- - Add explicit type annotations to implicit val
- - etc
+- Update dependencies
+- Migrate from travis-ci to GitHub Actions
+- Add explicit type annotations to implicit val
+- etc
 
 ## 2.4.2
- - Update joda-time to 2.10.3
+
+- Update joda-time to 2.10.3
 
 ## 2.4.1
- - Support Scala 2.13.0
- - Support Slick 3.3.1
+
+- Support Scala 2.13.0
+- Support Slick 3.3.1
 
 ## 2.4.0
- - Support Slick 3.3.0
+
+- Support Slick 3.3.0
 
 ## 2.3.0
- - Support Slick 3.2.0
+
+- Support Slick 3.2.0
 
 ## 2.2.0
- - Use JdbcProfile since JdbcDriver is deprecated.
+
+- Use JdbcProfile since JdbcDriver is deprecated.
 
 ## 2.1.0
- - Removed deprecated Access support
+
+- Removed deprecated Access support
 
 ## 2.0.0
- - Support Slick 3.0.0.
+
+- Support Slick 3.0.0.
 
 ## 1.2.0
- - Support Slick 2.1.0.
+
+- Support Slick 2.1.0.
 
 ## 1.1.0
- - Added DateTimeZone support.
+
+- Added DateTimeZone support.
 
 ## 1.0.1
- - Added JdbcJodaSupport.
+
+- Added JdbcJodaSupport.
