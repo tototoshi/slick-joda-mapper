@@ -1,3 +1,4 @@
 .bsp/
 target/
 *.db
+.testcontainers-*/
