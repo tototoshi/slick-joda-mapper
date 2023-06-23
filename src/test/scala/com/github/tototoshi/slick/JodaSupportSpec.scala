@@ -243,9 +243,10 @@ abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContaine
 }
 
 class MySQLJodaSupportSpec extends TestContainerSpec {
-  // TODO update 5.7 or later
-  // `.schema.create` does not work due to timestamp default value issue
-  override val container = MySQLContainer(mysqlImageVersion = DockerImageName.parse("mysql:5.6.50"))
+  override val container = MySQLContainer(
+    configurationOverride = "test-mysql-conf",
+    mysqlImageVersion = DockerImageName.parse("mysql:5.7.41")
+  )
   override def jdbcDriver = "com.mysql.jdbc.Driver"
   override val driver = MySQLProfile
   override val jodaSupport = MySQLJodaSupport
