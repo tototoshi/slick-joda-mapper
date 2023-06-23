@@ -11,6 +11,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 | Slick version | slick-joda-mapper version |
 | ------------- | ------------------------- |
+| 3.4.x         | 2.8.1                     |
 | 3.3.x         | 2.7.1                     |
 | 3.2.x         | 2.3.0                     |
 | 3.1.x         | 2.2.0                     |
@@ -20,8 +21,8 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % slickVersion,
   "com.github.tototoshi" %% "slick-joda-mapper" % slickJodaMapperVersion,
-  "joda-time" % "joda-time" % "2.7",
-  "org.joda" % "joda-convert" % "1.7"
+  "joda-time" % "joda-time" % "2.12.5",
+  "org.joda" % "joda-convert" % "2.2.3"
 )
 ```
 
@@ -177,6 +178,10 @@ import com.github.tototoshi.slick.JodaSupport._
 https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/github/tototoshi/slick/JodaSupportSpec.scala
 
 # Changelog
+
+## 2.8.0
+
+- Updated slick to 3.4.1
 
 ## 2.7.1
 
