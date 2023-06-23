@@ -11,7 +11,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.7.1",
-    crossScalaVersions := Seq("2.11.12", "2.12.18", "2.13.11", "3.3.0"),
+    crossScalaVersions := Seq("2.12.18", "2.13.11", "3.3.0"),
     scalaVersion := "2.13.11",
     scalacOptions ++= Seq(
       "-deprecation",
@@ -51,7 +51,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.7" % "test",
       "org.scalatest" %% "scalatest" % "3.2.16" % "test",
-      "com.typesafe.slick" %% "slick" % "3.3.3" % "provided" cross CrossVersion.for3Use2_13
+      "com.typesafe.slick" %% "slick" % "3.4.1" % "provided" cross CrossVersion.for3Use2_13
     ),
     initialCommands += """
       import org.joda.time._
