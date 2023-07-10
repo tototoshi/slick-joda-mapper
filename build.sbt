@@ -19,27 +19,6 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "-language:reflectiveCalls",
       "-language:implicitConversions",
     ),
-    scalacOptions ++= {
-      CrossVersion.partialVersion(scalaVersion.value) match {
-        case Some((3, _)) =>
-          Seq(
-            "-source",
-            "3.0-migration",
-          )
-        case _ =>
-          Nil
-      }
-    },
-    Test / sources := {
-      if (scalaBinaryVersion.value == "3") {
-        val exclude = Set(
-          "JodaSupportSpec.scala" // TODO slick macro
-        )
-        (Test / sources).value.filterNot(x => exclude(x.getName))
-      } else {
-        (Test / sources).value
-      }
-    },
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.12.5" % "provided",
       "org.joda" % "joda-convert" % "2.2.3" % "provided",
@@ -51,8 +30,14 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.9" % "test",
       "org.scalatest" %% "scalatest" % "3.2.17" % "test",
-      "com.typesafe.slick" %% "slick" % "3.4.1" % "provided" cross CrossVersion.for3Use2_13
     ),
+    libraryDependencies += {
+      if (scalaBinaryVersion.value == "3") {
+        "com.typesafe.slick" %% "slick" % "3.5.0-M4" % "provided"
+      } else {
+        "com.typesafe.slick" %% "slick" % "3.4.1" % "provided"
+      }
+    },
     initialCommands += """
       import org.joda.time._
       import java.sql._
