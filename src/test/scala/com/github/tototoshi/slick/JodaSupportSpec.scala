@@ -50,9 +50,11 @@ abstract class JodaSupportSpec extends AnyFunSpec
   def jdbcDriver: String
   def jdbcUser: String
   def jdbcPassword: String
+  def isWithoutCalender: Boolean
 
   import driver.api._
   import jodaSupport._
+  import slick.sql.SqlProfile.ColumnOption.SqlType
 
   case class Jodas(
       dateTimeZone: DateTimeZone,
@@ -72,8 +74,8 @@ abstract class JodaSupportSpec extends AnyFunSpec
     def dateTimeZone = column[DateTimeZone]("date_time_zone")
     def localDate = column[LocalDate]("local_date")
     def dateTime = column[DateTime]("date_time")
-    def instant = column[Instant]("instant")
-    def localDateTime = column[LocalDateTime]("local_date_time")
+    def instant = column[Instant]("instant", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
+    def localDateTime = column[LocalDateTime]("local_date_time", SqlType("timestamp not null default CURRENT_TIMESTAMP"))
     def localTime = column[LocalTime]("local_time")
     def optDateTimeZone = column[Option[DateTimeZone]]("opt_date_time_zone")
     def optLocalDate = column[Option[LocalDate]]("opt_local_date")
@@ -100,7 +102,6 @@ abstract class JodaSupportSpec extends AnyFunSpec
     val tz = TimeZone.getTimeZone("Asia/Tokyo")
     TimeZone.setDefault(tz)
     DateTimeZone.setDefault(DateTimeZone.forID(tz.getID))
-
     db.run(DBIO.seq(jodaTest.schema.create)).await()
   }
 
@@ -224,6 +225,41 @@ abstract class JodaSupportSpec extends AnyFunSpec
     res2.lift(1).map(_.localDate) should not be Some(new LocalDate(2012, 12, 5))
     res2.lift(2).map(_.localDate) should not be Some(new LocalDate(2012, 12, 5))
   }
+
+  private val systemTimeZone = java.util.TimeZone.getDefault().getID
+  Seq("Asia/Tokyo", "UTC", "Europe/London", "America/New_York").foreach { tz =>
+    val timeZone = DateTimeZone.forID(tz)
+    it(s"should be the same in/out joda-time zoned $tz") {
+      val otherZonedDateTime = new DateTime(2012, 12, 7, 0, 0, 0, 0, timeZone)
+      val data = Jodas(
+        DateTimeZone.forID("Asia/Tokyo"),
+        new LocalDate(2012, 12, 7),
+        otherZonedDateTime,
+        new DateTime(2012, 12, 7, 0, 0, 0, 0, DateTimeZone.UTC).toInstant,
+        new LocalDateTime(2012, 12, 7, 0, 0, 0, 0),
+        new LocalTime(1000),
+        Some(DateTimeZone.forID("America/New_York")),
+        Some(new LocalDate(2012, 12, 6)),
+        None,
+        Some(new Instant(1000)),
+        None,
+        Some(new LocalTime(1000))
+      )
+      db.run(jodaTest += data).await()
+
+      val actual = db.run(jodaTest.result).await()
+      actual should have size 1
+
+      actual.foreach { d =>
+        if (isWithoutCalender)
+          d.dateTime.getMillis should be(data.dateTime.getMillis)
+        else if (systemTimeZone == timeZone.getID)
+          d.dateTime.getMillis should be(data.dateTime.getMillis)
+        else
+          pending
+      }
+    }
+  }
 }
 
 class H2JodaSupportSpec extends JodaSupportSpec {
@@ -233,6 +269,7 @@ class H2JodaSupportSpec extends JodaSupportSpec {
   override def jdbcDriver = "org.h2.Driver"
   override def jdbcUser = "sa"
   override def jdbcPassword = null
+  override val isWithoutCalender = false
 }
 
 abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContainer {
@@ -242,14 +279,27 @@ abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContaine
   override def jdbcPassword = container.password
 }
 
+object MySQLJodaSupportSpec {
+  val mySQLDockerImageName = "mysql:5.7.41"
+}
+
 class MySQLJodaSupportSpec extends TestContainerSpec {
   override val container = MySQLContainer(
     configurationOverride = "test-mysql-conf",
-    mysqlImageVersion = DockerImageName.parse("mysql:5.7.41")
+    mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName)
   )
   override def jdbcDriver = "com.mysql.jdbc.Driver"
   override val driver = MySQLProfile
   override val jodaSupport = MySQLJodaSupport
+  override val isWithoutCalender = false
+}
+
+class MySQLJodaSupportWithoutCalenderSpec extends TestContainerSpec {
+  override val container = MySQLContainer(mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName))
+  override def jdbcDriver = "com.mysql.jdbc.Driver"
+  override val driver = MySQLProfile
+  override val jodaSupport = new GenericJodaSupport(MySQLProfile, _ => None)
+  override val isWithoutCalender = true
 }
 
 class PostgresJodaSupportSpec extends TestContainerSpec {
@@ -257,4 +307,5 @@ class PostgresJodaSupportSpec extends TestContainerSpec {
   override def jdbcDriver = "org.postgresql.Driver"
   override val driver = PostgresProfile
   override val jodaSupport = PostgresJodaSupport
+  override val isWithoutCalender = false
 }
