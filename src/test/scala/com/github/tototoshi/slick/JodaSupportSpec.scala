@@ -263,12 +263,12 @@ abstract class JodaSupportSpec extends AnyFunSpec
 }
 
 class H2JodaSupportSpec extends JodaSupportSpec {
-  override val driver = H2Profile
-  override val jodaSupport = H2JodaSupport
+  override val driver: JdbcProfile = H2Profile
+  override val jodaSupport: GenericJodaSupport = H2JodaSupport
   override def jdbcUrl = "jdbc:h2:mem:testh2;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=FALSE"
   override def jdbcDriver = "org.h2.Driver"
   override def jdbcUser = "sa"
-  override def jdbcPassword = null
+  override def jdbcPassword: String = null
   override val isWithoutCalender = false
 }
 
@@ -284,28 +284,28 @@ object MySQLJodaSupportSpec {
 }
 
 class MySQLJodaSupportSpec extends TestContainerSpec {
-  override val container = MySQLContainer(
+  override val container: JdbcDatabaseContainer with Container = MySQLContainer(
     configurationOverride = "test-mysql-conf",
     mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName)
   )
   override def jdbcDriver = "com.mysql.jdbc.Driver"
-  override val driver = MySQLProfile
-  override val jodaSupport = MySQLJodaSupport
+  override val driver: JdbcProfile = MySQLProfile
+  override val jodaSupport: GenericJodaSupport = MySQLJodaSupport
   override val isWithoutCalender = false
 }
 
 class MySQLJodaSupportWithoutCalenderSpec extends TestContainerSpec {
-  override val container = MySQLContainer(mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName))
+  override val container: JdbcDatabaseContainer with Container = MySQLContainer(mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName))
   override def jdbcDriver = "com.mysql.jdbc.Driver"
-  override val driver = MySQLProfile
-  override val jodaSupport = new GenericJodaSupport(MySQLProfile, _ => None)
+  override val driver: JdbcProfile = MySQLProfile
+  override val jodaSupport: GenericJodaSupport = new GenericJodaSupport(MySQLProfile, _ => None)
   override val isWithoutCalender = true
 }
 
 class PostgresJodaSupportSpec extends TestContainerSpec {
-  override val container = PostgreSQLContainer()
+  override val container: JdbcDatabaseContainer with Container = PostgreSQLContainer()
   override def jdbcDriver = "org.postgresql.Driver"
-  override val driver = PostgresProfile
-  override val jodaSupport = PostgresJodaSupport
+  override val driver: JdbcProfile = PostgresProfile
+  override val jodaSupport: GenericJodaSupport = PostgresJodaSupport
   override val isWithoutCalender = false
 }
