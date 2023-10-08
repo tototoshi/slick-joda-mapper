@@ -19,6 +19,14 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "-language:reflectiveCalls",
       "-language:implicitConversions",
     ),
+    scalacOptions ++= {
+      CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((2, _)) =>
+          Seq("-Xsource:3")
+        case _ =>
+          Nil
+      }
+    },
     libraryDependencies ++= Seq(
       "joda-time" % "joda-time" % "2.12.5" % "provided",
       "org.joda" % "joda-convert" % "2.2.3" % "provided",
