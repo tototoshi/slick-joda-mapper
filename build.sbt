@@ -73,7 +73,7 @@ def _publishTo(v: String) = {
 }
 
 lazy val _pomExtra =
-  <url>http://github.com/tototoshi/slick-joda-mapper</url>
+  <url>https://github.com/tototoshi/slick-joda-mapper</url>
     <licenses>
       <license>
         <name>Two-clause BSD-style license</name>
