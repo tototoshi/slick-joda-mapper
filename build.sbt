@@ -41,7 +41,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     ),
     libraryDependencies += {
       if (scalaBinaryVersion.value == "3") {
-        "com.typesafe.slick" %% "slick" % "3.5.0-M4" % "provided"
+        "com.typesafe.slick" %% "slick" % "3.5.0-M5" % "provided"
       } else {
         "com.typesafe.slick" %% "slick" % "3.4.1" % "provided"
       }
