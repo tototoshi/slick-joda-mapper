@@ -36,7 +36,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.postgresql" % "postgresql" % "42.7.2" % "test",
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
-      "org.slf4j" % "slf4j-simple" % "2.0.9" % "test",
+      "org.slf4j" % "slf4j-simple" % "2.0.12" % "test",
       "org.scalatest" %% "scalatest" % "3.2.18" % "test",
     ),
     libraryDependencies += {
