@@ -37,7 +37,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.testcontainers" % "mysql" % testContainerVersion % "test",
       "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.9" % "test",
-      "org.scalatest" %% "scalatest" % "3.2.17" % "test",
+      "org.scalatest" %% "scalatest" % "3.2.18" % "test",
     ),
     libraryDependencies += {
       if (scalaBinaryVersion.value == "3") {
