@@ -43,7 +43,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       if (scalaBinaryVersion.value == "3") {
         "com.typesafe.slick" %% "slick" % "3.5.0-RC1" % "provided"
       } else {
-        "com.typesafe.slick" %% "slick" % "3.4.1" % "provided"
+        "com.typesafe.slick" %% "slick" % "3.5.0" % "provided"
       }
     },
     initialCommands += """
