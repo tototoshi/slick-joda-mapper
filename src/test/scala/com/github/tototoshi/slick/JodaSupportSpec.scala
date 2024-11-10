@@ -273,7 +273,7 @@ class H2JodaSupportSpec extends JodaSupportSpec {
 }
 
 abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContainer {
-  override def container: JdbcDatabaseContainer with Container
+  override def container: JdbcDatabaseContainer & Container
   override def jdbcUrl = container.jdbcUrl
   override def jdbcUser = container.username
   override def jdbcPassword = container.password
@@ -284,7 +284,7 @@ object MySQLJodaSupportSpec {
 }
 
 class MySQLJodaSupportSpec extends TestContainerSpec {
-  override val container: JdbcDatabaseContainer with Container = MySQLContainer(
+  override val container: JdbcDatabaseContainer & Container = MySQLContainer(
     configurationOverride = "test-mysql-conf",
     mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName)
   )
@@ -295,7 +295,7 @@ class MySQLJodaSupportSpec extends TestContainerSpec {
 }
 
 class MySQLJodaSupportWithoutCalenderSpec extends TestContainerSpec {
-  override val container: JdbcDatabaseContainer with Container = MySQLContainer(mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName))
+  override val container: JdbcDatabaseContainer & Container = MySQLContainer(mysqlImageVersion = DockerImageName.parse(MySQLJodaSupportSpec.mySQLDockerImageName))
   override def jdbcDriver = "com.mysql.jdbc.Driver"
   override val driver: JdbcProfile = MySQLProfile
   override val jodaSupport: GenericJodaSupport = new GenericJodaSupport(MySQLProfile, _ => None)
@@ -303,7 +303,7 @@ class MySQLJodaSupportWithoutCalenderSpec extends TestContainerSpec {
 }
 
 class PostgresJodaSupportSpec extends TestContainerSpec {
-  override val container: JdbcDatabaseContainer with Container = PostgreSQLContainer()
+  override val container: JdbcDatabaseContainer & Container = PostgreSQLContainer()
   override def jdbcDriver = "org.postgresql.Driver"
   override val driver: JdbcProfile = PostgresProfile
   override val jodaSupport: GenericJodaSupport = PostgresJodaSupport
