@@ -2,7 +2,7 @@ import sbt._
 import sbt.Keys._
 import scalariform.formatter.preferences._
 
-def testContainerVersion = "1.15.3"
+def testContainerVersion = "1.20.4"
 
 lazy val `slick-joda-mapper` = project.in(file("."))
   .settings(scalariformSettings)
