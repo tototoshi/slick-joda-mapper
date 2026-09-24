@@ -2,8 +2,6 @@ import sbt._
 import sbt.Keys._
 import scalariform.formatter.preferences._
 
-def testContainerVersion = "1.20.6"
-
 lazy val `slick-joda-mapper` = project.in(file("."))
   .settings(scalariformSettings)
   .settings(publishingSettings)
@@ -31,11 +29,11 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "joda-time" % "joda-time" % "2.12.7" % "provided",
       "org.joda" % "joda-convert" % "2.2.4" % "provided",
       "com.h2database" % "h2" % "2.2.224" % "test",
-      "com.dimafeng" %% "testcontainers-scala" % "0.41.8" % "test",
+      "com.dimafeng" %% "testcontainers-scala-mysql" % "0.44.1" % "test",
+      "com.dimafeng" %% "testcontainers-scala-postgresql" % "0.44.1" % "test",
+      "com.dimafeng" %% "testcontainers-scala-scalatest" % "0.44.1" % "test",
       "com.mysql" % "mysql-connector-j" % "9.7.0" % "test",
       "org.postgresql" % "postgresql" % "42.7.13" % "test",
-      "org.testcontainers" % "mysql" % testContainerVersion % "test",
-      "org.testcontainers" % "postgresql" % testContainerVersion % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.20" % "test",
       "org.scalatest" %% "scalatest" % "3.2.20" % "test",
       "com.typesafe.slick" %% "slick" % "3.5.2" % "provided",
