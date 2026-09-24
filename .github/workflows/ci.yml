@@ -20,7 +20,7 @@ jobs:
     - uses: actions/setup-java@v6
       with:
         java-version: ${{matrix.java}}
-        distribution: adopt
+        distribution: temurin
     - uses: coursier/cache-action@v8
     - uses: sbt/setup-sbt@v1
     - run: sbt -v "+test"
