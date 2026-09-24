@@ -280,7 +280,7 @@ abstract class TestContainerSpec extends JodaSupportSpec with ForAllTestContaine
 }
 
 object MySQLJodaSupportSpec {
-  val mySQLDockerImageName = "mysql:5.7.41"
+  val mySQLDockerImageName = "mysql:8.0.31"
 }
 
 class MySQLJodaSupportSpec extends TestContainerSpec {
@@ -303,7 +303,7 @@ class MySQLJodaSupportWithoutCalenderSpec extends TestContainerSpec {
 }
 
 class PostgresJodaSupportSpec extends TestContainerSpec {
-  override val container: JdbcDatabaseContainer with Container = PostgreSQLContainer()
+  override val container: JdbcDatabaseContainer with Container = PostgreSQLContainer.Def(DockerImageName.parse("postgres:15.1")).createContainer()
   override def jdbcDriver = "org.postgresql.Driver"
   override val driver: JdbcProfile = PostgresProfile
   override val jodaSupport: GenericJodaSupport = PostgresJodaSupport
