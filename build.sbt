@@ -36,7 +36,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.postgresql" % "postgresql" % "42.7.13" % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.20" % "test",
       "org.scalatest" %% "scalatest" % "3.2.20" % "test",
-      "com.typesafe.slick" %% "slick" % "3.5.2" % "provided",
+      "com.typesafe.slick" %% "slick" % "3.6.1" % "provided",
     ),
     initialCommands += """
       import org.joda.time._
