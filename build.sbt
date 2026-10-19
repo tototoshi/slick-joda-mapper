@@ -9,8 +9,8 @@ lazy val `slick-joda-mapper` = project.in(file("."))
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
     version := "2.9.1",
-    crossScalaVersions := Seq("2.12.21", "2.13.18", "3.3.8"),
-    scalaVersion := "2.13.18",
+    crossScalaVersions := Seq("2.12.21", "3.10.0", "3.3.8"),
+    scalaVersion := "3.10.0",
     scalacOptions ++= Seq(
       "-deprecation",
       "-feature",
