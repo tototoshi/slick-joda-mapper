@@ -11,6 +11,7 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 
 | Slick version | slick-joda-mapper version |
 | ------------- | ------------------------- |
+| 3.6.x         | 2.10.0                    |
 | 3.5.x         | 2.9.1                     |
 | 3.4.x         | 2.8.0                     |
 | 3.3.x         | 2.7.1                     |
@@ -22,37 +23,37 @@ You can persist `DateTime`, `Instant`, `LocalDateTime`, `LocalDate`, `LocalTime`
 libraryDependencies ++= Seq(
   "com.typesafe.slick" %% "slick" % slickVersion,
   "com.github.tototoshi" %% "slick-joda-mapper" % slickJodaMapperVersion,
-  "joda-time" % "joda-time" % "2.12.5",
-  "org.joda" % "joda-convert" % "2.2.3"
+  "joda-time" % "joda-time" % "2.12.7",
+  "org.joda" % "joda-convert" % "2.2.4"
 )
 ```
 
 Import the appropriate `xJodaSupport` class suitable for the database you use (`H2JodaSupport`, `PostgresJodaSupport`, `MySQLJodaSupport`, etc.).
-For example, import Slick's `H2Driver` API and `H2JodaSupport` if you are using the H2 database:
+For example, import Slick's `H2Profile` API and `H2JodaSupport` if you are using the H2 database:
 
 ```scala
-import slick.driver.H2Driver.api._
+import slick.jdbc.H2Profile.api._
 import com.github.tototoshi.slick.H2JodaSupport._
 ```
 
 As another example, if you are using the Postgres database:
 
 ```scala
-import slick.driver.PostgresDriver.api._
+import slick.jdbc.PostgresProfile.api._
 import com.github.tototoshi.slick.PostgresJodaSupport._
 ```
 
 Different drivers **can't** be mixed, You **can't** do the following.
 
 ```scala
-import scala.slick.driver.H2Driver.api._
+import slick.jdbc.H2Profile.api._
 import com.github.tototoshi.slick.JdbcJodaSupport._
 ```
 
 Write your own `JdbcSupport` when you want to write db agnostic model class.
 
 ```scala
-object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(yourAbstractDriver)
+object PortableJodaSupport extends com.github.tototoshi.slick.GenericJodaSupport(yourAbstractProfile)
 
 import PortableJodaSupport._
 ```
@@ -180,7 +181,11 @@ https://github.com/tototoshi/slick-joda-mapper/blob/master/src/test/scala/com/gi
 
 # Changelog
 
-## 2.9.0
+## 2.10.0
+
+- Updated slick to 3.6.1
+
+## 2.9.1
 
 - Fixed slick version for Scala 3
 
