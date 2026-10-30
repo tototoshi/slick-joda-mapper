@@ -58,6 +58,10 @@ lazy val publishingSettings = Seq(
     if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
     else localStaging.value
   },
+  credentials ++= (for {
+    username <- sys.env.get("SONATYPE_USERNAME")
+    password <- sys.env.get("SONATYPE_PASSWORD")
+  } yield Credentials("Sonatype Nexus Repository Manager", "central.sonatype.com", username, password)).toSeq,
   Test / publishArtifact := false,
   pomExtra := _pomExtra
 )
