@@ -8,7 +8,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
   .settings(
     name := "slick-joda-mapper",
     organization := "com.github.tototoshi",
-    version := "2.9.1",
+    version := "2.10.0-SNAPSHOT",
     crossScalaVersions := Seq("2.12.21", "2.13.18", "3.3.9"),
     scalaVersion := "2.13.18",
     scalacOptions ++= Seq(
@@ -36,7 +36,7 @@ lazy val `slick-joda-mapper` = project.in(file("."))
       "org.postgresql" % "postgresql" % "42.7.14" % "test",
       "org.slf4j" % "slf4j-simple" % "2.0.20" % "test",
       "org.scalatest" %% "scalatest" % "3.2.20" % "test",
-      "com.typesafe.slick" %% "slick" % "3.5.2" % "provided",
+      "com.typesafe.slick" %% "slick" % "3.6.1" % "provided",
     ),
     initialCommands += """
       import org.joda.time._
@@ -53,16 +53,14 @@ lazy val scalariformSettings = Seq(
 
 lazy val publishingSettings = Seq(
   publishMavenStyle := true,
-  publishTo := _publishTo(version.value),
+  publishTo := {
+    val centralSnapshots = "https://central.sonatype.com/repository/maven-snapshots/"
+    if (isSnapshot.value) Some("central-snapshots" at centralSnapshots)
+    else localStaging.value
+  },
   Test / publishArtifact := false,
   pomExtra := _pomExtra
 )
-
-def _publishTo(v: String) = {
-  val nexus = "https://oss.sonatype.org/"
-  if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
 
 lazy val _pomExtra =
   <url>https://github.com/tototoshi/slick-joda-mapper</url>

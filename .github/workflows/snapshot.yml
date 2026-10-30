@@ -1,0 +1,44 @@
+name: Snapshot
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: snapshot
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-java@v6
+      with:
+        java-version: 17
+        distribution: temurin
+    - uses: coursier/cache-action@v8
+    - uses: sbt/setup-sbt@v1
+    - name: Check version
+      id: version
+      run: |
+        version=$(sbt -batch -no-colors -error 'print version' | tail -1)
+        if [[ "$version" == *-SNAPSHOT ]]; then
+          echo "snapshot=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "::notice::Skipping snapshot publish: version is $version"
+        fi
+    - name: Test
+      if: steps.version.outputs.snapshot == 'true'
+      run: sbt -v "+test"
+    - name: Publish snapshot
+      if: steps.version.outputs.snapshot == 'true'
+      env:
+        SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+      run: sbt -v "+publish"
