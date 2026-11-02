@@ -15,7 +15,7 @@ jobs:
       with:
         java-version: 8
         distribution: temurin
-    - uses: coursier/cache-action@v8
+    - uses: coursier/cache-action@v9
     - uses: sbt/setup-sbt@v1
     - name: Check version
       run: |
